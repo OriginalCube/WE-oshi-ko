@@ -1,8 +1,10 @@
 {
   "songs": [
     {
+      "name": "IDOL",
       "image": "./assets/images/Idol.png",
-      "music": "./assets/songs/Idol.mp3"
+      "music": "./assets/songs/Idol.mp3",
+      "artist": "YOASOBI"
     }
   ]
 }

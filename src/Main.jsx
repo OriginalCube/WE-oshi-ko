@@ -1,5 +1,5 @@
 import React from "react";
-import Visualizer from "./components/Visualizer";
+import Visualizer from "./components/visualizer/Visualizer";
 
 const Main = () => {
   const [mode, setMode] = React.useState(0);
