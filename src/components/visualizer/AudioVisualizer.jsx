@@ -10,18 +10,16 @@ const AudioVisualizer = () => {
     function wallpaperAudioListener(audioArray) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       // Render bars along the full width of the canvas
-      var barWidth = canvas.width / audioArray.length;
-      var halfCount = audioArray.length / 2;
+      const whiteSpace = (canvas.width * 0.1) / 47;
+      var barWidth = (canvas.width - whiteSpace * 48) / 48;
       // Begin with the left channel in red
-      ctx.fillStyle = `#6366f1`;
-      var tempHeight = canvas.height * 0.85;
+      ctx.fillStyle = `#d946ef`;
       // Iterate over the first 64 array elements (0 - 63) for the left channel audio data
-      for (let i = 0; i < halfCount; ++i) {
-        // Create an audio bar with its hight depending on the audio volume level of the current frequency
-        var height = tempHeight * Math.min(audioArray[i], 1);
-        ctx.globalAlpha = 0.7;
+      for (let i = 48; i >= 0; --i) {
+        var height = Math.min(canvas.height * 0.8 * Math.min(audioArray[i], 1));
+
         ctx.fillRect(
-          barWidth * i * 2 + 2,
+          barWidth * i + i * whiteSpace,
           canvas.height - height,
           barWidth,
           height
@@ -35,7 +33,7 @@ const AudioVisualizer = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="border-b-2 border-indigo-500 absolute"
+      className="border-b-2 border-pink-500 absolute"
       style={{ left: "16.65%", top: "23.85%" }}
     />
   );

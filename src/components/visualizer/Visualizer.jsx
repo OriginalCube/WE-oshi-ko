@@ -251,7 +251,7 @@ const Visualizer = () => {
         onKeyUp={onScrubEnd}
       />
       <div
-        className="visualizer-container text-3xl bg-indigo-500 rounded-sm absolute h-1/4 w-2/3 flex"
+        className="visualizer-container text-3xl bg-pink-500 rounded-sm absolute h-1/4 w-2/3 flex"
         style={{ left: "16.65%", top: "46%" }}
       >
         <div className="h-full" style={{ width: "23%" }}>
