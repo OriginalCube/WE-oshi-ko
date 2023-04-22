@@ -1,9 +1,13 @@
 import React from "react";
 import SongData from "../SongData.json";
+import VisualizerCanvas from "./VisualizerCanvas";
+import AudioVisualizer from "./AudioVisualizer";
 
 const Visualizer = () => {
   const [isActive, setIsActive] = React.useState(true);
   const [songId, setSongId] = React.useState(0);
+  const [repeat, setRepeat] = React.useState(false);
+  const [shuffle, setShuffle] = React.useState(false);
 
   //DRY
   let keypress = new Audio();
@@ -31,6 +35,7 @@ const Visualizer = () => {
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       if (audioRef.current.ended) {
+        onSkip();
       } else {
         setProgress(audioRef.current.currentTime);
       }
@@ -49,6 +54,70 @@ const Visualizer = () => {
     setPlaying(false);
     startTimer();
   };
+
+  const onPlay = () => {
+    if (isPlaying) {
+      audioRef.current.pause();
+      setPlaying(false);
+    } else {
+      audioRef.current.play();
+      setPlaying(true);
+    }
+    clickAudio(1);
+  };
+
+  const onShuffle = () => {
+    if (!shuffle) {
+      setRepeat(false);
+    }
+    setShuffle(!shuffle);
+    clickAudio(0);
+  };
+
+  const onRepeat = () => {
+    if (!repeat) {
+      setShuffle(false);
+    }
+    setRepeat(!repeat);
+    clickAudio(0);
+  };
+
+  const onSkip = () => {
+    if (songId + 1 < SongData["songs"].length) {
+      setSongId(songId + 1);
+    } else {
+      setSongId(0);
+    }
+  };
+
+  const onPrev = () => {
+    if (songId - 1 >= 0) {
+      setSongId(songId - 1);
+    } else {
+      setSongId(SongData["songs"].length - 1);
+    }
+  };
+
+  const lessVolume = () => {
+    if (volume - 0.1 > 0) {
+      setVolume(Math.round((volume - 0.1) * 10) / 10);
+    } else {
+      setVolume(0);
+    }
+    clickAudio(0);
+  };
+
+  const addVolume = () => {
+    if (volume >= 0 && volume + 0.1 <= 1) {
+      setVolume(volume + 0.1);
+    }
+    clickAudio(0);
+  };
+
+  React.useEffect(() => {
+    audioRef.current.volume = volume;
+    localStorage.setItem("volume", volume);
+  }, [volume]);
 
   React.useEffect(() => {
     if (isPlaying) {
@@ -77,19 +146,19 @@ const Visualizer = () => {
       audioRef.current.pause();
       clearInterval(intervalRef.current);
     };
-  }, []);
+  }, [songId]);
 
   //Static Section
   const VisualizerText = () => (
     <>
       <p
-        className="song-title mt-16 ml-5 font-medium text-white"
+        className="song-title mt-14 ml-5 font-medium text-white"
         style={{ fontSize: `7rem` }}
       >
         {isActive ? SongData["songs"][songId].name : null}
       </p>
       <p
-        className="font-extrathin mt-8 ml-5 text-white"
+        className="font-extrathin mt-10 ml-5 text-white"
         style={{ fontSize: "2rem" }}
       >
         {isActive ? SongData["songs"][songId].artist : null}
@@ -98,7 +167,7 @@ const Visualizer = () => {
   );
 
   const VisualizerControls = () => (
-    <div className="h-2/3 flex relative opacity-80 visualizer-controls w-3/5 top-1/5">
+    <div className="h-2/5 flex relative opacity-80 visualizer-controls w-3/5 top-1/4">
       <div className=" h-5/6 w-auto">
         <img
           className="w-full h-full"
@@ -107,11 +176,17 @@ const Visualizer = () => {
         />
       </div>
       <div className=" h-5/6 w-auto">
-        <img className="w-full h-full" src="./assets/icons/replay.png" alt="" />
+        <img
+          onClick={onRepeat}
+          className="w-full h-full"
+          src={`./assets/icons/${repeat ? "replayToggle" : "replay"}.png`}
+          alt=""
+        />
       </div>
 
       <div className=" h-5/6 w-auto">
         <img
+          onClick={lessVolume}
           className="w-full h-full"
           src="./assets/icons/volumeMinus.png"
           alt=""
@@ -119,16 +194,23 @@ const Visualizer = () => {
       </div>
       <div className=" h-5/6 w-auto">
         <img
+          onClick={onPrev}
           className="w-full h-full"
           src="./assets/icons/backward.png"
           alt=""
         />
       </div>
       <div className=" h-5/6 w-auto">
-        <img className="w-full h-full" src="./assets/icons/play.png" alt="" />
+        <img
+          onClick={onPlay}
+          className="w-full h-full"
+          src={`./assets/icons/${isPlaying ? "play" : "pause"}.png`}
+          alt=""
+        />
       </div>
       <div className=" h-5/6 w-auto">
         <img
+          onClick={onSkip}
           className="w-full h-full"
           src="./assets/icons/forward.png"
           alt=""
@@ -136,6 +218,7 @@ const Visualizer = () => {
       </div>
       <div className=" h-5/6 w-auto">
         <img
+          onClick={addVolume}
           className="w-full h-full"
           src="./assets/icons/volumePlus.png"
           alt=""
@@ -143,8 +226,9 @@ const Visualizer = () => {
       </div>
       <div className=" h-5/6 w-auto">
         <img
+          onClick={onShuffle}
           className="w-full h-full"
-          src="./assets/icons/shuffle.png"
+          src={`./assets/icons/${shuffle ? "shuffleToggle" : "shuffle"}.png`}
           alt=""
         />
       </div>
@@ -152,10 +236,8 @@ const Visualizer = () => {
   );
   return (
     <div className="h-full w-full visualizer">
-      <div
-        className="absolute w-2/3 bg-indigo-500"
-        style={{ left: "16.65%", height: "3px", top: "44%" }}
-      ></div>
+      <VisualizerCanvas />
+      <AudioVisualizer />
       <input
         className="absolute w-2/3"
         style={{ left: "16.65%", top: "43.2%" }}
@@ -169,10 +251,10 @@ const Visualizer = () => {
         onKeyUp={onScrubEnd}
       />
       <div
-        className="visualizer-container text-3xl bg-indigo-500 rounded-sm absolute h-1/3 w-2/3 flex"
+        className="visualizer-container text-3xl bg-indigo-500 rounded-sm absolute h-1/4 w-2/3 flex"
         style={{ left: "16.65%", top: "46%" }}
       >
-        <div className="h-full" style={{ width: "28%" }}>
+        <div className="h-full" style={{ width: "23%" }}>
           <img
             className="h-full w-full"
             src="./assets/images/Idol.png"

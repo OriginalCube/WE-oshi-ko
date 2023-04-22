@@ -5,6 +5,12 @@
       "image": "./assets/images/Idol.png",
       "music": "./assets/songs/Idol.mp3",
       "artist": "YOASOBI"
+    },
+    {
+      "name": "MEPHISTO",
+      "image": "./assets/images/Mephisto.jpg",
+      "music": "./assets/songs/Mephisto.mp3",
+      "artist": "QUEEN BEE"
     }
   ]
 }
