@@ -23,15 +23,16 @@ const Visualizer = () => {
 
     applyUserProperties: (properties) => {
       if (properties.backgroundcolor) {
-        let customColor = properties.backgroundcolor.split(" ");
+        let customColor = properties.backgroundcolor.value.split(" ");
         customColor = customColor.map(function (c) {
           return Math.ceil(c * 255);
         });
+        console.log(customColor);
         setBackgroundColor(customColor);
       }
 
       if (properties.playercolor) {
-        let customColor = properties.playercolor.split(" ");
+        let customColor = properties.playercolor.value.split(" ");
         customColor = customColor.map(function (c) {
           return Math.ceil(c * 255);
         });
@@ -299,7 +300,10 @@ const Visualizer = () => {
         }}
       ></div>
       <VisualizerCanvas />
-      <AudioVisualizer playerColor={playerColor} />
+      <AudioVisualizer
+        playerColor={playerColor}
+        playerOpacity={playerOpacity}
+      />
       <input
         className="absolute w-2/3"
         style={{ left: "16.65%", top: "45.1%" }}
@@ -318,7 +322,7 @@ const Visualizer = () => {
           left: "16.65%",
           top: "48%",
           height: "22%",
-          backgroundColor: `rgb(${playerColor})`,
+          backgroundColor: `rgba(${playerColor}, ${playerOpacity})`,
         }}
       >
         <div className="h-full" style={{ width: "22%" }}>
