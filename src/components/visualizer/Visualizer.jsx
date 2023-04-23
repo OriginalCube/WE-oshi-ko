@@ -8,6 +8,49 @@ const Visualizer = () => {
   const [songId, setSongId] = React.useState(0);
   const [repeat, setRepeat] = React.useState(false);
   const [shuffle, setShuffle] = React.useState(false);
+  const [background, setBackground] = React.useState([]);
+  const [backgroundColor, setBackgroundColor] = React.useState();
+  const [backgroundId, setBackgroundId] = React.useState(0);
+  const [bgOpacity, setBgOpacity] = React.useState(0.5);
+  const [playerColor, setPlayerColor] = React.useState();
+  const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
+
+  //Wallpaper Engine Properties
+  window.wallpaperPropertyListener = {
+    userDirectoryFilesAddedOrChanged: function (propertyName, changedFiles) {
+      setBackground(changedFiles);
+    },
+
+    applyUserProperties: (properties) => {
+      if (properties.backgroundcolor) {
+        let customColor = properties.backgroundcolor.split(" ");
+        customColor = customColor.map(function (c) {
+          return Math.ceil(c * 255);
+        });
+        setBackgroundColor(customColor);
+      }
+
+      if (properties.playercolor) {
+        let customColor = properties.playercolor.split(" ");
+        customColor = customColor.map(function (c) {
+          return Math.ceil(c * 255);
+        });
+        setPlayerColor(customColor);
+      }
+
+      if (properties.playeropacity) {
+        setPlayerOpacity(properties.background.value / 10);
+      }
+
+      if (properties.backgroundopacity) {
+        setBgOpacity(properties.backgroundopacity.value / 10);
+      }
+    },
+  };
+
+  React.useEffect(() => {
+    console.log(background);
+  }, [background]);
 
   //DRY
   let keypress = new Audio();
@@ -131,8 +174,12 @@ const Visualizer = () => {
   React.useEffect(() => {
     audioRef.current.pause();
     audioRef.current = new Audio(`${SongData["songs"][songId].music}`);
-    console.log(SongData["songs"][songId].music);
     audioRef.current.volume = volume;
+    if (backgroundId + 1 < background.length) {
+      setBackgroundId(backgroundId + 1);
+    } else {
+      setBackgroundId(0);
+    }
     if (isReady.current) {
       audioRef.current.play();
       setPlaying(true);
@@ -152,14 +199,14 @@ const Visualizer = () => {
   const VisualizerText = () => (
     <>
       <p
-        className="song-title mt-14 ml-5 font-medium text-white"
-        style={{ fontSize: `7rem` }}
+        className="song-title mt-12 ml-5 font-medium text-white opacity-80"
+        style={{ fontSize: `6rem` }}
       >
         {isActive ? SongData["songs"][songId].name : null}
       </p>
       <p
-        className="font-extrathin mt-10 ml-5 text-white"
-        style={{ fontSize: "2rem" }}
+        className="font-extrathin mt-8 ml-5 text-white opacity-80"
+        style={{ fontSize: "1.75rem" }}
       >
         {isActive ? SongData["songs"][songId].artist : null}
       </p>
@@ -234,13 +281,28 @@ const Visualizer = () => {
       </div>
     </div>
   );
+
   return (
     <div className="h-full w-full visualizer">
+      {background.length > 0 ? (
+        <img
+          className="w-full h-full absolute"
+          alt={""}
+          src={"file:///" + background[backgroundId]}
+        />
+      ) : null}
+      <div
+        className="absolute h-full w-full"
+        style={{
+          backgroundColor: `rgb(${backgroundColor})`,
+          opacity: bgOpacity,
+        }}
+      ></div>
       <VisualizerCanvas />
-      <AudioVisualizer />
+      <AudioVisualizer playerColor={playerColor} />
       <input
         className="absolute w-2/3"
-        style={{ left: "16.65%", top: "43.2%" }}
+        style={{ left: "16.65%", top: "45.1%" }}
         type="range"
         step="1"
         min="0"
@@ -251,13 +313,18 @@ const Visualizer = () => {
         onKeyUp={onScrubEnd}
       />
       <div
-        className="visualizer-container text-3xl bg-pink-500 rounded-sm absolute h-1/4 w-2/3 flex"
-        style={{ left: "16.65%", top: "46%" }}
+        className="visualizer-container text-3xl rounded-sm absolute w-2/3 flex"
+        style={{
+          left: "16.65%",
+          top: "48%",
+          height: "22%",
+          backgroundColor: `rgb(${playerColor})`,
+        }}
       >
-        <div className="h-full" style={{ width: "23%" }}>
+        <div className="h-full" style={{ width: "22%" }}>
           <img
             className="h-full w-full"
-            src="./assets/images/Idol.png"
+            src={SongData["songs"][songId].image}
             alt=""
           />
         </div>

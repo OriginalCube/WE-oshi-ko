@@ -1,6 +1,6 @@
 import React from "react";
 
-const AudioVisualizer = () => {
+const AudioVisualizer = (props) => {
   const canvasRef = React.useRef(null);
   React.useEffect(() => {
     const canvas = canvasRef.current;
@@ -13,7 +13,7 @@ const AudioVisualizer = () => {
       const whiteSpace = (canvas.width * 0.1) / 47;
       var barWidth = (canvas.width - whiteSpace * 48) / 48;
       // Begin with the left channel in red
-      ctx.fillStyle = `#d946ef`;
+      ctx.fillStyle = "white";
       // Iterate over the first 64 array elements (0 - 63) for the left channel audio data
       for (let i = 48; i >= 0; --i) {
         var height = Math.min(canvas.height * 0.8 * Math.min(audioArray[i], 1));
@@ -33,8 +33,12 @@ const AudioVisualizer = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="border-b-2 border-pink-500 absolute"
-      style={{ left: "16.65%", top: "23.85%" }}
+      className="absolute"
+      style={{
+        left: "16.65%",
+        top: "25.85%",
+        borderBottom: `2px solid rgb(${props.playerColor})`,
+      }}
     />
   );
 };
