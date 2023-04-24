@@ -14,6 +14,7 @@ const Visualizer = () => {
   const [bgOpacity, setBgOpacity] = React.useState(0.5);
   const [playerColor, setPlayerColor] = React.useState();
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
+  const [textSize, setTextSize] = React.useState(10);
 
   //Wallpaper Engine Properties
   window.wallpaperPropertyListener = {
@@ -201,13 +202,13 @@ const Visualizer = () => {
     <>
       <p
         className="song-title mt-12 ml-5 font-medium text-white opacity-80"
-        style={{ fontSize: `6rem` }}
+        style={{ fontSize: `${0.6 * textSize}rem` }}
       >
         {isActive ? SongData["songs"][songId].name : null}
       </p>
       <p
         className="font-extrathin mt-8 ml-5 text-white opacity-80"
-        style={{ fontSize: "1.75rem" }}
+        style={{ fontSize: `${0.175 * textSize}rem` }}
       >
         {isActive ? SongData["songs"][songId].artist : null}
       </p>

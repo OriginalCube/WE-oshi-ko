@@ -13,7 +13,8 @@ const AudioVisualizer = (props) => {
       const whiteSpace = (canvas.width * 0.1) / 47;
       var barWidth = (canvas.width - whiteSpace * 48) / 48;
       // Begin with the left channel in red
-      ctx.fillStyle = `rgba(${props.playerColor}, ${props.playerOpacity}`;
+      ctx.fillStyle = `rgb(${props.playerColor})`;
+      ctx.globalAlpha = props.playerOpacity;
       // Iterate over the first 64 array elements (0 - 63) for the left channel audio data
       for (let i = 48; i >= 0; --i) {
         var height = Math.min(canvas.height * 0.8 * Math.min(audioArray[i], 1));
