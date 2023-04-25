@@ -9,10 +9,10 @@ const Visualizer = () => {
   const [repeat, setRepeat] = React.useState(false);
   const [shuffle, setShuffle] = React.useState(false);
   const [background, setBackground] = React.useState([]);
-  const [backgroundColor, setBackgroundColor] = React.useState();
+  const [backgroundColor, setBackgroundColor] = React.useState("");
   const [backgroundId, setBackgroundId] = React.useState(0);
   const [bgOpacity, setBgOpacity] = React.useState(0.5);
-  const [playerColor, setPlayerColor] = React.useState();
+  const [playerColor, setPlayerColor] = React.useState("236, 72, 153");
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
   const [mainImage, setMainImage] = React.useState("");
@@ -43,7 +43,8 @@ const Visualizer = () => {
       }
 
       if (properties.playeropacity) {
-        setPlayerOpacity(properties.background.value / 10);
+        console.log(properties.playeropacity);
+        setPlayerOpacity(properties.playeropacity.value / 10);
       }
 
       if (properties.backgroundopacity) {
@@ -60,9 +61,9 @@ const Visualizer = () => {
     function wallpaperMediaThumbnailListener(event) {
       //media
       //console.log(event);
-      //event.thumbnail;
-      //console.log(event.primaryColor);
-      //console.log(event.secondaryColor);
+      if (isPlaying) {
+        setMainImage(event.thumbnail);
+      }
     }
 
     // Register the media thumbnail listener provided by Wallpaper Engine. pictures
@@ -72,8 +73,11 @@ const Visualizer = () => {
 
     function wallpaperMediaPropertiesListener(event) {
       // Update title and artist labels
-      //event.title;
-      //event.artist;
+      console.log(event.title, event.artist);
+      if (isPlaying) {
+        setSongName(event.title);
+        setArtistName(event.artist);
+      }
     }
     window.wallpaperRegisterMediaPropertiesListener(
       wallpaperMediaPropertiesListener
@@ -202,6 +206,9 @@ const Visualizer = () => {
       startTimer();
     } else {
       audioRef.current.play();
+      setMainImage(SongData["songs"][songId].image);
+      setSongName(SongData["songs"][songId].name);
+      setArtistName(SongData["songs"][songId].artist);
     }
   }, [isPlaying]);
 
@@ -209,6 +216,9 @@ const Visualizer = () => {
     audioRef.current.pause();
     audioRef.current = new Audio(`${SongData["songs"][songId].music}`);
     audioRef.current.volume = volume;
+    setMainImage(SongData["songs"][songId].image);
+    setSongName(SongData["songs"][songId].name);
+    setArtistName(SongData["songs"][songId].artist);
     if (backgroundId + 1 < background.length) {
       setBackgroundId(backgroundId + 1);
     } else {
@@ -236,13 +246,13 @@ const Visualizer = () => {
         className="song-title mt-12 ml-5 font-medium text-white opacity-80"
         style={{ fontSize: `${0.6 * textSize}rem` }}
       >
-        {isActive ? SongData["songs"][songId].name : null}
+        {songName.substring(0, 12).toUpperCase()}
       </p>
       <p
         className="font-extrathin mt-8 ml-5 text-white opacity-80"
         style={{ fontSize: `${0.175 * textSize}rem` }}
       >
-        {isActive ? SongData["songs"][songId].artist : null}
+        {artistName.substring(0, 15).toUpperCase()}
       </p>
     </>
   );
@@ -359,11 +369,7 @@ const Visualizer = () => {
         }}
       >
         <div className="h-full" style={{ width: "22%" }}>
-          <img
-            className="h-full w-full"
-            src={SongData["songs"][songId].image}
-            alt=""
-          />
+          <img className="h-full w-full" src={mainImage} alt="" />
         </div>
         <div className="w-full h-full flex flex-col">
           <div className="w-full h-2/3">
