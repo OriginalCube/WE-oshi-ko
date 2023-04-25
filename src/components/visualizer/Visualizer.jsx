@@ -15,6 +15,9 @@ const Visualizer = () => {
   const [playerColor, setPlayerColor] = React.useState();
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
+  const [mainImage, setMainImage] = React.useState("");
+  const [songName, setSongName] = React.useState("");
+  const [artistName, setArtistName] = React.useState("");
 
   //Wallpaper Engine Properties
   window.wallpaperPropertyListener = {
@@ -28,7 +31,6 @@ const Visualizer = () => {
         customColor = customColor.map(function (c) {
           return Math.ceil(c * 255);
         });
-        console.log(customColor);
         setBackgroundColor(customColor);
       }
 
@@ -47,8 +49,38 @@ const Visualizer = () => {
       if (properties.backgroundopacity) {
         setBgOpacity(properties.backgroundopacity.value / 10);
       }
+
+      if (properties.textsize) {
+        setTextSize(properties.textsize.value);
+      }
     },
   };
+
+  try {
+    function wallpaperMediaThumbnailListener(event) {
+      //media
+      //console.log(event);
+      //event.thumbnail;
+      //console.log(event.primaryColor);
+      //console.log(event.secondaryColor);
+    }
+
+    // Register the media thumbnail listener provided by Wallpaper Engine. pictures
+    window.wallpaperRegisterMediaThumbnailListener(
+      wallpaperMediaThumbnailListener
+    );
+
+    function wallpaperMediaPropertiesListener(event) {
+      // Update title and artist labels
+      //event.title;
+      //event.artist;
+    }
+    window.wallpaperRegisterMediaPropertiesListener(
+      wallpaperMediaPropertiesListener
+    );
+  } catch (e) {
+    //
+  }
 
   React.useEffect(() => {
     console.log(background);
