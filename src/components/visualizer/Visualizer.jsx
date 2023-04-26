@@ -2,6 +2,7 @@ import React from "react";
 import SongData from "../SongData.json";
 import VisualizerCanvas from "./VisualizerCanvas";
 import AudioVisualizer from "./AudioVisualizer";
+import Playlist from "./Playlist";
 
 const Visualizer = () => {
   const [isActive, setIsActive] = React.useState(true);
@@ -14,10 +15,13 @@ const Visualizer = () => {
   const [bgOpacity, setBgOpacity] = React.useState(0.5);
   const [playerColor, setPlayerColor] = React.useState("236, 72, 153");
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
+  const [pbOpacity, setPbOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
   const [mainImage, setMainImage] = React.useState("");
   const [songName, setSongName] = React.useState("");
   const [artistName, setArtistName] = React.useState("");
+  const [lockBg, setLockBg] = React.useState(false);
+  const [playlist, setPlaylist] = React.useState(false);
 
   //Wallpaper Engine Properties
   window.wallpaperPropertyListener = {
@@ -49,6 +53,10 @@ const Visualizer = () => {
 
       if (properties.backgroundopacity) {
         setBgOpacity(properties.backgroundopacity.value / 10);
+      }
+
+      if (properties.playerbarsopacity) {
+        setPbOpacity(properties.playerbarsopacity.value / 10);
       }
 
       if (properties.textsize) {
@@ -86,10 +94,6 @@ const Visualizer = () => {
     //
   }
 
-  React.useEffect(() => {
-    console.log(background);
-  }, [background]);
-
   //DRY
   let keypress = new Audio();
   const [isPlaying, setPlaying] = React.useState(false);
@@ -116,7 +120,11 @@ const Visualizer = () => {
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       if (audioRef.current.ended) {
-        onSkip();
+        if (repeat) {
+          audioRef.current.play();
+        } else {
+          onSkip();
+        }
       } else {
         setProgress(audioRef.current.currentTime);
       }
@@ -195,6 +203,21 @@ const Visualizer = () => {
     clickAudio(0);
   };
 
+  const onPlaylist = () => {
+    setPlaylist(!playlist);
+    clickAudio(0);
+  };
+
+  const onLock = () => {
+    setLockBg(!lockBg);
+    clickAudio(0);
+  };
+
+  const changeSong = (e) => {
+    setSongId(e);
+    clickAudio(1);
+  };
+
   React.useEffect(() => {
     audioRef.current.volume = volume;
     localStorage.setItem("volume", volume);
@@ -219,7 +242,7 @@ const Visualizer = () => {
     setMainImage(SongData["songs"][songId].image);
     setSongName(SongData["songs"][songId].name);
     setArtistName(SongData["songs"][songId].artist);
-    if (backgroundId + 1 < background.length) {
+    if (backgroundId + 1 < background.length && !lockBg) {
       setBackgroundId(backgroundId + 1);
     } else {
       setBackgroundId(0);
@@ -243,14 +266,22 @@ const Visualizer = () => {
   const VisualizerText = () => (
     <>
       <p
-        className="song-title mt-12 ml-5 font-medium text-white opacity-80"
-        style={{ fontSize: `${0.6 * textSize}rem` }}
+        className="song-title font-semibold text-white opacity-80 spotify-regular overflow-visible"
+        style={{
+          fontSize: `${0.6 * textSize}rem`,
+          marginTop: `${0.3 * textSize}rem`,
+          marginLeft: `${0.125 * textSize}rem`,
+        }}
       >
         {songName.substring(0, 12).toUpperCase()}
       </p>
       <p
-        className="font-extrathin mt-8 ml-5 text-white opacity-80"
-        style={{ fontSize: `${0.175 * textSize}rem` }}
+        className="font-extrathin text-white opacity-70 spotify-regular"
+        style={{
+          fontSize: `${0.175 * textSize}rem`,
+          marginTop: `${0.2 * textSize}rem`,
+          marginLeft: `${0.125 * textSize}rem`,
+        }}
       >
         {artistName.substring(0, 15).toUpperCase()}
       </p>
@@ -258,9 +289,10 @@ const Visualizer = () => {
   );
 
   const VisualizerControls = () => (
-    <div className="h-2/5 flex relative opacity-80 visualizer-controls w-3/5 top-1/4">
+    <div className="h-2/5 flex relative opacity-80 visualizer-controls w-3/5 top-1/4 overflow-visible">
       <div className=" h-5/6 w-auto">
         <img
+          onClick={onPlaylist}
           className="w-full h-full"
           src="./assets/icons/playlist.png"
           alt=""
@@ -323,6 +355,14 @@ const Visualizer = () => {
           alt=""
         />
       </div>
+      <div className=" h-5/6 w-auto">
+        <img
+          onClick={onLock}
+          className="w-full h-full"
+          src={`./assets/icons/padlock.png`}
+          alt=""
+        />
+      </div>
     </div>
   );
 
@@ -343,10 +383,7 @@ const Visualizer = () => {
         }}
       ></div>
       <VisualizerCanvas />
-      <AudioVisualizer
-        playerColor={playerColor}
-        playerOpacity={playerOpacity}
-      />
+      <AudioVisualizer playerColor={playerColor} playerOpacity={pbOpacity} />
       <input
         className="absolute w-2/3"
         style={{ left: "16.65%", top: "45.1%" }}
@@ -369,7 +406,11 @@ const Visualizer = () => {
         }}
       >
         <div className="h-full" style={{ width: "22%" }}>
-          <img className="h-full w-full" src={mainImage} alt="" />
+          {playlist ? (
+            <Playlist playerColor={playerColor} changeSong={changeSong} />
+          ) : (
+            <img className="h-full w-full" src={mainImage} alt="" />
+          )}
         </div>
         <div className="w-full h-full flex flex-col">
           <div className="w-full h-2/3">

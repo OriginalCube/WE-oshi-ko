@@ -5,10 +5,21 @@
 * {
   margin: 0;
   padding: 0;
+  overflow: hidden;
+}
+
+@font-face {
+  font-family: "Spotify";
+  src: local("Spotify"), url(./fonts/Heebo-Regular.ttf) format("TrueType");
+}
+
+.spotify-regular {
+  font-family: "Spotify";
 }
 
 .App {
   background-color: black;
+  overflow: hidden;
 }
 
 .visualizer input {
