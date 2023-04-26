@@ -177,6 +177,7 @@ const Visualizer = () => {
     } else {
       setSongId(0);
     }
+    clickAudio(0);
   };
 
   const onPrev = () => {
@@ -185,6 +186,7 @@ const Visualizer = () => {
     } else {
       setSongId(SongData["songs"].length - 1);
     }
+    clickAudio(0);
   };
 
   const lessVolume = () => {
@@ -242,10 +244,12 @@ const Visualizer = () => {
     setMainImage(SongData["songs"][songId].image);
     setSongName(SongData["songs"][songId].name);
     setArtistName(SongData["songs"][songId].artist);
-    if (backgroundId + 1 < background.length && !lockBg) {
-      setBackgroundId(backgroundId + 1);
-    } else {
-      setBackgroundId(0);
+    if (lockBg) {
+      if (backgroundId + 1 < background.length) {
+        setBackgroundId(backgroundId + 1);
+      } else {
+        setBackgroundId(0);
+      }
     }
     if (isReady.current) {
       audioRef.current.play();
