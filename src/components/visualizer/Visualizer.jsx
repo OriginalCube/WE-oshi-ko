@@ -94,6 +94,10 @@ const Visualizer = () => {
     //
   }
 
+  React.useEffect(() => {
+    setBackgroundId(0);
+  }, [background]);
+
   //DRY
   let keypress = new Audio();
   const [isPlaying, setPlaying] = React.useState(false);
@@ -266,6 +270,12 @@ const Visualizer = () => {
     };
   }, [songId]);
 
+  React.useState(() => {
+    if (localStorage.getItem("volume")) {
+      setVolume(parseInt(localStorage.getItem("volume")));
+    }
+  }, []);
+
   //Static Section
   const VisualizerText = () => (
     <>
@@ -372,7 +382,7 @@ const Visualizer = () => {
 
   return (
     <div className="h-full w-full visualizer">
-      {background.length > 0 ? (
+      {background.length !== 0 ? (
         <img
           className="w-full h-full absolute"
           alt={""}
