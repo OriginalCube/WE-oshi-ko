@@ -24,8 +24,8 @@ const Navigation = (props) => {
     onSound(1);
   };
 
-  const onPlaylist = () => {
-    props.onPlaylist();
+  const customBg = () => {
+    props.customBg();
     onSound(1);
   };
 
@@ -43,10 +43,28 @@ const Navigation = (props) => {
         className="navigation-icon"
       />
       {setting ? (
-        <div className="navigation-icon-container">
-          <img onClick={onVisualizer} src="./assets/icons/sound.png" alt="" />
-          <img onClick={onPlayer} src="./assets/icons/headphones.png" alt="" />
-          <img src="./assets/icons/playlist.png" alt="" />
+        <div className="navigation-icon-container flex flex-col">
+          <div className="h-full w-4/5 m-auto overflow-visible">
+            <img
+              onClick={onPlayer}
+              src="./assets/icons/headphones.png"
+              alt=""
+            />
+          </div>
+          <div className="h-full w-full">
+            <img
+              onClick={customBg}
+              src="./assets/icons/background.png"
+              alt=""
+            />
+          </div>
+          <div className="h-full w-full">
+            <img
+              onClick={onVisualizer}
+              src="./assets/icons/petals.png"
+              alt=""
+            />
+          </div>
         </div>
       ) : null}
     </>

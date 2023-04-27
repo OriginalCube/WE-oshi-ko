@@ -25,7 +25,7 @@ const Visualizer = () => {
   const [playlist, setPlaylist] = React.useState(false);
   //Settings
   const [player, setPlayer] = React.useState(true);
-  const [visualizer, setVisualizer] = React.useState(true);
+  const [petalsAnim, setPetalsAnim] = React.useState(true);
 
   //Wallpaper Engine Properties
   window.wallpaperPropertyListener = {
@@ -239,8 +239,18 @@ const Visualizer = () => {
     }
   };
 
-  const onVisualizer = () => {
-    setVisualizer(!visualizer);
+  const onPetal = () => {
+    setPetalsAnim(!petalsAnim);
+  };
+
+  const customBg = () => {
+    if (lockBg) {
+      if (backgroundId + 1 < background.length) {
+        setBackgroundId(backgroundId + 1);
+      } else {
+        setBackgroundId(0);
+      }
+    }
   };
 
   React.useEffect(() => {
@@ -264,16 +274,11 @@ const Visualizer = () => {
     audioRef.current.pause();
     audioRef.current = new Audio(`${SongData["songs"][songId].music}`);
     audioRef.current.volume = volume;
+    customBg();
     setMainImage(SongData["songs"][songId].image);
     setSongName(SongData["songs"][songId].name);
     setArtistName(SongData["songs"][songId].artist);
-    if (lockBg) {
-      if (backgroundId + 1 < background.length) {
-        setBackgroundId(backgroundId + 1);
-      } else {
-        setBackgroundId(0);
-      }
-    }
+
     if (isReady.current) {
       audioRef.current.play();
       setPlaying(true);
@@ -415,13 +420,13 @@ const Visualizer = () => {
           opacity: bgOpacity,
         }}
       ></div>
-      <VisualizerCanvas />
-      <AudioVisualizer
-        playerColor={playerColor}
-        playerOpacity={pbOpacity}
-        visualizer={visualizer}
+      {petalsAnim ? <VisualizerCanvas /> : null}
+      <AudioVisualizer playerColor={playerColor} playerOpacity={pbOpacity} />
+      <Navigation
+        onVisualizer={onPetal}
+        onPlayer={onPlayer}
+        customBg={customBg}
       />
-      <Navigation onVisualizer={onVisualizer} onPlayer={onPlayer} />
       {player ? (
         <input
           className="absolute w-2/3"

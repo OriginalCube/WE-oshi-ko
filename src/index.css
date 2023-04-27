@@ -52,15 +52,16 @@
   top: 15%;
   right: 1.5vh;
   width: 8vh;
-  height: 40%;
+  height: 30%;
+  justify-content: space-around;
 }
 
 .navigation-icon-container img {
   position: relative;
   margin: auto;
+  padding: 5px;
   width: 5vh;
   height: 5vh;
-  margin-bottom: 25%;
   animation: boxTurn 9s infinite;
   opacity: 0.8;
 }
