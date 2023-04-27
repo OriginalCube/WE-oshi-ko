@@ -36,3 +36,49 @@
   justify-content: space-evenly;
   gap: 5px;
 }
+
+.navigation-icon {
+  position: absolute;
+  top: 5.5%;
+  right: 3vh;
+  width: 5vh;
+  height: 5vh;
+  animation: boxRotate 4s infinite;
+  opacity: 0.8;
+}
+
+.navigation-icon-container {
+  position: absolute;
+  top: 15%;
+  right: 1.5vh;
+  width: 8vh;
+  height: 40%;
+}
+
+.navigation-icon-container img {
+  position: relative;
+  margin: auto;
+  width: 5vh;
+  height: 5vh;
+  margin-bottom: 25%;
+  animation: boxTurn 9s infinite;
+  opacity: 0.8;
+}
+
+@keyframes boxTurn {
+  33% {
+    transform: rotate(45deg);
+  }
+  66% {
+    transform: rotate(-45deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes boxRotate {
+  50% {
+    transform: rotate(180deg);
+  }
+}

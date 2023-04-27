@@ -3,6 +3,7 @@ import SongData from "../SongData.json";
 import VisualizerCanvas from "./VisualizerCanvas";
 import AudioVisualizer from "./AudioVisualizer";
 import Playlist from "./Playlist";
+import Navigation from "./Navigation";
 
 const Visualizer = () => {
   const [isActive, setIsActive] = React.useState(true);
@@ -22,6 +23,9 @@ const Visualizer = () => {
   const [artistName, setArtistName] = React.useState("");
   const [lockBg, setLockBg] = React.useState(false);
   const [playlist, setPlaylist] = React.useState(false);
+  //Settings
+  const [player, setPlayer] = React.useState(true);
+  const [visualizer, setVisualizer] = React.useState(true);
 
   //Wallpaper Engine Properties
   window.wallpaperPropertyListener = {
@@ -224,6 +228,21 @@ const Visualizer = () => {
     clickAudio(1);
   };
 
+  const onPlayer = () => {
+    setPlayer(!player);
+    if (isPlaying) {
+      audioRef.current.pause();
+      setPlaying(false);
+    } else {
+      audioRef.current.play();
+      setPlaying(true);
+    }
+  };
+
+  const onVisualizer = () => {
+    setVisualizer(!visualizer);
+  };
+
   React.useEffect(() => {
     audioRef.current.volume = volume;
     localStorage.setItem("volume", volume);
@@ -397,19 +416,26 @@ const Visualizer = () => {
         }}
       ></div>
       <VisualizerCanvas />
-      <AudioVisualizer playerColor={playerColor} playerOpacity={pbOpacity} />
-      <input
-        className="absolute w-2/3"
-        style={{ left: "16.65%", top: "45.1%" }}
-        type="range"
-        step="1"
-        min="0"
-        value={trackProgress}
-        max={duration ? duration : `${duration}`}
-        onChange={(e) => onScrub(e.target.value)}
-        onMouseUp={onScrubEnd}
-        onKeyUp={onScrubEnd}
+      <AudioVisualizer
+        playerColor={playerColor}
+        playerOpacity={pbOpacity}
+        visualizer={visualizer}
       />
+      <Navigation onVisualizer={onVisualizer} onPlayer={onPlayer} />
+      {player ? (
+        <input
+          className="absolute w-2/3"
+          style={{ left: "16.65%", top: "45.1%" }}
+          type="range"
+          step="1"
+          min="0"
+          value={trackProgress}
+          max={duration ? duration : `${duration}`}
+          onChange={(e) => onScrub(e.target.value)}
+          onMouseUp={onScrubEnd}
+          onKeyUp={onScrubEnd}
+        />
+      ) : null}
       <div
         className="visualizer-container text-3xl rounded-sm absolute w-2/3 flex"
         style={{
@@ -431,7 +457,7 @@ const Visualizer = () => {
             <VisualizerText />
           </div>
           <div className="w-full h-1/3">
-            <VisualizerControls />
+            {player ? <VisualizerControls /> : null}
           </div>
         </div>
       </div>

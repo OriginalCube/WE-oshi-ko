@@ -62,9 +62,11 @@ const AudioVisualizer = (props) => {
       }
     }
     try {
-      window.wallpaperRegisterAudioListener(wallpaperAudioListener);
+      if (props.visualizer) {
+        window.wallpaperRegisterAudioListener(wallpaperAudioListener);
+      }
     } catch (e) {}
-  }, [playerColor, playerOpacity]);
+  }, [playerColor, playerOpacity, props.visualizer]);
   return (
     <canvas
       ref={canvasRef}
