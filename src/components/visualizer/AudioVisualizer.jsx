@@ -11,30 +11,7 @@ const AudioVisualizer = (props) => {
 
   React.useEffect(() => {
     //rgb(255, 156 ,5);
-    const rawData = `rgb(${props.playerColor})`;
-    let cleanData = "";
-    for (let i = 4; i < rawData.length - 1; i++) {
-      cleanData += rawData[i];
-    }
-    let rgbArray = [];
-    rgbArray = cleanData.split(",");
-
-    function componentToHex(c) {
-      var hex = c.toString(16);
-      return hex.length === 1 ? "0" + hex : hex;
-    }
-
-    function rgbToHex(r, g, b) {
-      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-    }
-
-    setPlayerColor(
-      rgbToHex(
-        parseInt(rgbArray[0]),
-        parseInt(rgbArray[1]),
-        parseInt(rgbArray[2])
-      )
-    );
+    setPlayerColor(props.playerColor);
   }, [props.playerColor]);
 
   React.useEffect(() => {

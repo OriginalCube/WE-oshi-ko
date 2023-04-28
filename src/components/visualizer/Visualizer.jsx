@@ -23,6 +23,7 @@ const Visualizer = () => {
   const [artistName, setArtistName] = React.useState("");
   const [lockBg, setLockBg] = React.useState(false);
   const [playlist, setPlaylist] = React.useState(false);
+  const [playerBg, setPlayerBg] = React.useState("236, 72, 153");
   //Settings
   const [player, setPlayer] = React.useState(true);
   const [petalsAnim, setPetalsAnim] = React.useState(true);
@@ -68,6 +69,33 @@ const Visualizer = () => {
       }
     },
   };
+
+  React.useEffect(() => {
+    const rawData = `rgb(${playerColor})`;
+    let cleanData = "";
+    for (let i = 4; i < rawData.length - 1; i++) {
+      cleanData += rawData[i];
+    }
+    let rgbArray = [];
+    rgbArray = cleanData.split(",");
+
+    function componentToHex(c) {
+      var hex = c.toString(16);
+      return hex.length === 1 ? "0" + hex : hex;
+    }
+
+    function rgbToHex(r, g, b) {
+      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+
+    setPlayerBg(
+      rgbToHex(
+        parseInt(rgbArray[0]),
+        parseInt(rgbArray[1]),
+        parseInt(rgbArray[2])
+      )
+    );
+  }, [playerColor]);
 
   try {
     function wallpaperMediaThumbnailListener(event) {
@@ -421,7 +449,7 @@ const Visualizer = () => {
         }}
       ></div>
       {petalsAnim ? <VisualizerCanvas /> : null}
-      <AudioVisualizer playerColor={playerColor} playerOpacity={pbOpacity} />
+      <AudioVisualizer playerColor={playerBg} playerOpacity={pbOpacity} />
       <Navigation
         onVisualizer={onPetal}
         onPlayer={onPlayer}
