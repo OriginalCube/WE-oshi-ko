@@ -326,6 +326,16 @@ const Visualizer = () => {
     if (localStorage.getItem("volume")) {
       setVolume(parseInt(localStorage.getItem("volume")));
     }
+    if (localStorage.getItem("oshi-ko-04")) {
+      setPlayer(true);
+      setPetalsAnim(true);
+      const preset = [{ player: true }, { petalsAnim: true }];
+      localStorage.setItem("oshi-ko-04", JSON.stringify(preset));
+    } else {
+      const tempData = localStorage.getItem("oshi-ko-04");
+      setPlayer(tempData[0].player);
+      setPetalsAnim(tempData[1].petalsAnim);
+    }
   }, []);
 
   //Static Section
