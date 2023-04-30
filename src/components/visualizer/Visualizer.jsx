@@ -39,10 +39,12 @@ const Visualizer = () => {
       try {
         if (properties.backgroundcolor) {
           let customColor = properties.backgroundcolor.value.split(" ");
-          customColor = customColor.map(function (c) {
-            return Math.ceil(c * 255);
-          });
-          setBackgroundColor(customColor);
+          if (customColor) {
+            customColor = customColor.map(function (c) {
+              return Math.ceil(c * 255);
+            });
+            setBackgroundColor(customColor);
+          }
         }
       } catch (e) {
         console.log(e);
@@ -50,10 +52,12 @@ const Visualizer = () => {
       try {
         if (properties.playercolor) {
           let customColor = properties.playercolor.value.split(" ");
-          customColor = customColor.map(function (c) {
-            return Math.ceil(c * 255);
-          });
-          setPlayerColor(customColor);
+          if (customColor) {
+            customColor = customColor.map(function (c) {
+              return Math.ceil(c * 255);
+            });
+            setPlayerColor(customColor);
+          }
         }
       } catch (e) {
         console.log(e);
@@ -94,14 +98,6 @@ const Visualizer = () => {
     function rgbToHex(r, g, b) {
       return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
     }
-
-    console.log(
-      rgbToHex(
-        parseInt(rgbArray[0]),
-        parseInt(rgbArray[1]),
-        parseInt(rgbArray[2])
-      )
-    );
 
     setPlayerBg(
       rgbToHex(
