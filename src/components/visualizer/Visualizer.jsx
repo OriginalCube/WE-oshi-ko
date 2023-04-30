@@ -136,9 +136,7 @@ const Visualizer = () => {
     window.wallpaperRegisterMediaPropertiesListener(
       wallpaperMediaPropertiesListener
     );
-  } catch (e) {
-    //
-  }
+  } catch (e) {}
 
   React.useEffect(() => {
     setBackgroundId(0);
@@ -276,13 +274,6 @@ const Visualizer = () => {
 
   const onPlayer = () => {
     setPlayer(!player);
-    if (isPlaying) {
-      audioRef.current.pause();
-      setPlaying(true);
-    } else {
-      audioRef.current.play();
-      setPlaying(false);
-    }
   };
 
   const onPetal = () => {
@@ -317,23 +308,26 @@ const Visualizer = () => {
   }, [isPlaying]);
 
   React.useEffect(() => {
-    audioRef.current.pause();
-    audioRef.current = new Audio(`${SongData["songs"][songId].music}`);
-    audioRef.current.volume = volume;
-    customBg();
-    setMainImage(SongData["songs"][songId].image);
-    setSongName(SongData["songs"][songId].name);
-    setArtistName(SongData["songs"][songId].artist);
-
-    if (isReady.current) {
-      audioRef.current.play();
-      setPlaying(true);
-      startTimer();
-    } else {
-      // Set the isReady ref as true for the next pass
-      isReady.current = true;
+    try {
+      audioRef.current.pause();
+      audioRef.current = new Audio(`${SongData["songs"][songId].music}`);
+      audioRef.current.volume = volume;
+      customBg();
+      setMainImage(SongData["songs"][songId].image);
+      setSongName(SongData["songs"][songId].name);
+      setArtistName(SongData["songs"][songId].artist);
+      if (isReady.current) {
+        audioRef.current.play();
+        setPlaying(true);
+        startTimer();
+      } else {
+        // Set the isReady ref as true for the next pass
+        isReady.current = true;
+      }
+      setPlaying(audioRef.isPlaying);
+    } catch (e) {
+      console.log("ERROR WIND SONGINDEX");
     }
-    setPlaying(audioRef.isPlaying);
     return () => {
       audioRef.current.pause();
       clearInterval(intervalRef.current);
