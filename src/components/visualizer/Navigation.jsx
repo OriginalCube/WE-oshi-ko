@@ -29,6 +29,11 @@ const Navigation = (props) => {
     onSound(1);
   };
 
+  const onRemoveVis = () => {
+    props.removeVis();
+    onSound(1);
+  };
+
   const onSetting = () => {
     setSetting(!setting);
     onSound(0);
@@ -50,6 +55,9 @@ const Navigation = (props) => {
               src="./assets/icons/headphones.png"
               alt=""
             />
+          </div>
+          <div className="h-full w-full">
+            <img onClick={onRemoveVis} src="./assets/icons/sound.png" alt="" />
           </div>
           <div className="h-full w-full">
             <img

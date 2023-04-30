@@ -11,6 +11,24 @@
       "image": "./assets/images/Mephisto.jpg",
       "music": "./assets/songs/Mephisto.mp3",
       "artist": "QUEEN BEE"
+    },
+    {
+      "name": "SIGN♡B",
+      "image": "./assets/images/signb.jpg",
+      "music": "./assets/songs/signb.mp3",
+      "artist": "B-KOMACHI"
+    },
+    {
+      "name": "HEART'S♡KISS",
+      "image": "./assets/images/HEART's♡KISS.jpg",
+      "music": "./assets/songs/HEART's♡KISS.mp3",
+      "artist": "B-KOMACHI"
+    },
+    {
+      "name": "STAR☆T☆RAIN",
+      "image": "./assets/images/startttrain.jpg",
+      "music": "./assets/songs/startttrain.mp3",
+      "artist": "B-KOMACHI"
     }
   ]
 }

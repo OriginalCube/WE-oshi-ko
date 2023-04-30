@@ -21,12 +21,13 @@ const Visualizer = () => {
   const [mainImage, setMainImage] = React.useState("");
   const [songName, setSongName] = React.useState("");
   const [artistName, setArtistName] = React.useState("");
-  const [lockBg, setLockBg] = React.useState(false);
+  const [lockBg, setLockBg] = React.useState(true);
   const [playlist, setPlaylist] = React.useState(false);
   const [playerBg, setPlayerBg] = React.useState("236, 72, 153");
   //Settings
   const [player, setPlayer] = React.useState(true);
   const [petalsAnim, setPetalsAnim] = React.useState(true);
+  const [visualizer, setVisualizer] = React.useState(true);
 
   //Wallpaper Engine Properties
   window.wallpaperPropertyListener = {
@@ -35,24 +36,30 @@ const Visualizer = () => {
     },
 
     applyUserProperties: (properties) => {
-      if (properties.backgroundcolor) {
-        let customColor = properties.backgroundcolor.value.split(" ");
-        customColor = customColor.map(function (c) {
-          return Math.ceil(c * 255);
-        });
-        setBackgroundColor(customColor);
+      try {
+        if (properties.backgroundcolor) {
+          let customColor = properties.backgroundcolor.value.split(" ");
+          customColor = customColor.map(function (c) {
+            return Math.ceil(c * 255);
+          });
+          setBackgroundColor(customColor);
+        }
+      } catch (e) {
+        console.log(e);
       }
-
-      if (properties.playercolor) {
-        let customColor = properties.playercolor.value.split(" ");
-        customColor = customColor.map(function (c) {
-          return Math.ceil(c * 255);
-        });
-        setPlayerColor(customColor);
+      try {
+        if (properties.playercolor) {
+          let customColor = properties.playercolor.value.split(" ");
+          customColor = customColor.map(function (c) {
+            return Math.ceil(c * 255);
+          });
+          setPlayerColor(customColor);
+        }
+      } catch (e) {
+        console.log(e);
       }
 
       if (properties.playeropacity) {
-        console.log(properties.playeropacity);
         setPlayerOpacity(properties.playeropacity.value / 10);
       }
 
@@ -88,6 +95,14 @@ const Visualizer = () => {
       return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
     }
 
+    console.log(
+      rgbToHex(
+        parseInt(rgbArray[0]),
+        parseInt(rgbArray[1]),
+        parseInt(rgbArray[2])
+      )
+    );
+
     setPlayerBg(
       rgbToHex(
         parseInt(rgbArray[0]),
@@ -100,8 +115,7 @@ const Visualizer = () => {
   try {
     function wallpaperMediaThumbnailListener(event) {
       //media
-      //console.log(event);
-      if (isPlaying) {
+      if (isPlaying || !player) {
         setMainImage(event.thumbnail);
       }
     }
@@ -256,14 +270,18 @@ const Visualizer = () => {
     clickAudio(1);
   };
 
+  const removeVis = () => {
+    setVisualizer(!visualizer);
+  };
+
   const onPlayer = () => {
     setPlayer(!player);
     if (isPlaying) {
       audioRef.current.pause();
-      setPlaying(false);
+      setPlaying(true);
     } else {
       audioRef.current.play();
-      setPlaying(true);
+      setPlaying(false);
     }
   };
 
@@ -326,15 +344,22 @@ const Visualizer = () => {
     if (localStorage.getItem("volume")) {
       setVolume(parseInt(localStorage.getItem("volume")));
     }
-    if (localStorage.getItem("oshi-ko-04")) {
+    try {
+      if (localStorage.getItem("oshi-ko-04")) {
+        const tempData = JSON.parse(localStorage.getItem("oshi-ko-04"));
+        setPlayer(tempData[0].player);
+        setPetalsAnim(tempData[1].petalsAnim);
+      } else {
+        setPlayer(true);
+        setPetalsAnim(true);
+        const preset = [{ player: true }, { petalsAnim: true }];
+        localStorage.setItem("oshi-ko-04", JSON.stringify(preset));
+      }
+    } catch (e) {
       setPlayer(true);
       setPetalsAnim(true);
       const preset = [{ player: true }, { petalsAnim: true }];
       localStorage.setItem("oshi-ko-04", JSON.stringify(preset));
-    } else {
-      const tempData = localStorage.getItem("oshi-ko-04");
-      setPlayer(tempData[0].player);
-      setPetalsAnim(tempData[1].petalsAnim);
     }
   }, []);
 
@@ -459,12 +484,23 @@ const Visualizer = () => {
         }}
       ></div>
       {petalsAnim ? <VisualizerCanvas /> : null}
-      <AudioVisualizer playerColor={playerBg} playerOpacity={pbOpacity} />
+      {visualizer ? (
+        <AudioVisualizer playerColor={playerBg} playerOpacity={pbOpacity} />
+      ) : null}
       <Navigation
+        removeVis={removeVis}
         onVisualizer={onPetal}
         onPlayer={onPlayer}
         customBg={customBg}
       />
+      <div
+        className="absolute w-2/3"
+        style={{
+          left: "16.65%",
+          top: "45.85%",
+          borderBottom: `2px solid rgba(${playerColor}, ${playerOpacity})`,
+        }}
+      ></div>
       {player ? (
         <input
           className="absolute w-2/3"
@@ -479,6 +515,7 @@ const Visualizer = () => {
           onKeyUp={onScrubEnd}
         />
       ) : null}
+
       <div
         className="visualizer-container text-3xl rounded-sm absolute w-2/3 flex"
         style={{
@@ -490,7 +527,11 @@ const Visualizer = () => {
       >
         <div className="h-full" style={{ width: "22%" }}>
           {playlist ? (
-            <Playlist playerColor={playerColor} changeSong={changeSong} />
+            <Playlist
+              playerColor={playerColor}
+              changeSong={changeSong}
+              textSize={textSize}
+            />
           ) : (
             <img className="h-full w-full" src={mainImage} alt="" />
           )}
