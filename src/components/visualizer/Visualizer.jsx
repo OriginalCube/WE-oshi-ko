@@ -6,8 +6,9 @@ import Playlist from "./Playlist";
 import Navigation from "./Navigation";
 
 const Visualizer = () => {
-  const [isActive, setIsActive] = React.useState(true);
-  const [songId, setSongId] = React.useState(0);
+  const [songId, setSongId] = React.useState(
+    Math.floor(SongData["songs"].length * Math.random())
+  );
   const [repeat, setRepeat] = React.useState(false);
   const [shuffle, setShuffle] = React.useState(false);
   const [background, setBackground] = React.useState([]);
@@ -216,10 +217,14 @@ const Visualizer = () => {
   };
 
   const onSkip = () => {
-    if (songId + 1 < SongData["songs"].length) {
-      setSongId(songId + 1);
+    if (!shuffle) {
+      if (songId + 1 < SongData["songs"].length) {
+        setSongId(songId + 1);
+      } else {
+        setSongId(0);
+      }
     } else {
-      setSongId(0);
+      setSongId(Math.floor(SongData["songs"].length * Math.random()));
     }
     clickAudio(0);
   };
@@ -332,7 +337,8 @@ const Visualizer = () => {
 
   React.useState(() => {
     if (localStorage.getItem("volume")) {
-      setVolume(parseInt(localStorage.getItem("volume")));
+      setVolume(JSON.parse(localStorage.getItem("volume")));
+    } else {
     }
     try {
       if (localStorage.getItem("oshi-ko-04")) {
