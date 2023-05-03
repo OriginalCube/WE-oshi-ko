@@ -140,6 +140,11 @@ const Visualizer = (props) => {
     clickAudio(0);
   };
 
+  const changeSong = (ev) => {
+    setSongId(ev);
+    clickAudio(1);
+  };
+
   React.useEffect(() => {
     audioRef.current.volume = volume;
     localStorage.setItem("volume", volume);
@@ -239,7 +244,7 @@ const Visualizer = (props) => {
       >
         <div className="h-full" style={{ width: "22%" }}>
           {playlist ? (
-            <Playlist textSize={textSize} />
+            <Playlist textSize={textSize} changeSong={changeSong} />
           ) : (
             <img className="h-full w-full" src={mainImage} alt="" />
           )}
