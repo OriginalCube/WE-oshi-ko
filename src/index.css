@@ -22,7 +22,7 @@
   overflow: hidden;
 }
 
-.visualizer input {
+input {
   -webkit-appearance: none;
   background: none;
   outline: none;

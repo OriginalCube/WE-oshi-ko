@@ -72,7 +72,7 @@ const VisualizerCanvas = () => {
 
       let mouseX = 0;
       function touchHandler(e) {
-        mouseX = e.clientX / window.innerWidth;
+        mouseX = (e.clientX || e.touches[0].clientX) / window.innerWidth;
       }
       petalLoad();
       window.addEventListener("mousemove", touchHandler);

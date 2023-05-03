@@ -12,10 +12,10 @@ const Visualizer = () => {
   const [repeat, setRepeat] = React.useState(false);
   const [shuffle, setShuffle] = React.useState(false);
   const [background, setBackground] = React.useState([]);
-  const [backgroundColor, setBackgroundColor] = React.useState("");
+  const [backgroundColor, setBackgroundColor] = React.useState("#000000");
   const [backgroundId, setBackgroundId] = React.useState(0);
   const [bgOpacity, setBgOpacity] = React.useState(0.5);
-  const [playerColor, setPlayerColor] = React.useState("236, 72, 153");
+  const [playerColor, setPlayerColor] = React.useState("#ec4899"); //236, 72, 153
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [pbOpacity, setPbOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
@@ -37,32 +37,32 @@ const Visualizer = () => {
     },
 
     applyUserProperties: (properties) => {
-      try {
-        if (properties.backgroundcolor) {
-          let customColor = properties.backgroundcolor.value.split(" ");
-          if (customColor) {
-            customColor = customColor.map(function (c) {
-              return Math.ceil(c * 255);
-            });
-            setBackgroundColor(customColor);
-          }
-        }
-      } catch (e) {
-        console.log(e);
-      }
-      try {
-        if (properties.playercolor) {
-          let customColor = properties.playercolor.value.split(" ");
-          if (customColor) {
-            customColor = customColor.map(function (c) {
-              return Math.ceil(c * 255);
-            });
-            setPlayerColor(customColor);
-          }
-        }
-      } catch (e) {
-        console.log(e);
-      }
+      // try {
+      //   if (properties.backgroundcolor) {
+      //     let customColor = properties.backgroundcolor.value.split(" ");
+      //     if (customColor) {
+      //       customColor = customColor.map(function (c) {
+      //         return Math.ceil(c * 255);
+      //       });
+      //       setBackgroundColor(customColor);
+      //     }
+      //   }
+      // } catch (e) {
+      //   console.log(e);
+      // }
+      // try {
+      //   if (properties.playercolor) {
+      //     let customColor = properties.playercolor.value.split(" ");
+      //     if (customColor) {
+      //       customColor = customColor.map(function (c) {
+      //         return Math.ceil(c * 255);
+      //       });
+      //       setPlayerColor(customColor);
+      //     }
+      //   }
+      // } catch (e) {
+      //   console.log(e);
+      // }
 
       if (properties.playeropacity) {
         setPlayerOpacity(properties.playeropacity.value / 10);
@@ -82,32 +82,32 @@ const Visualizer = () => {
     },
   };
 
-  React.useEffect(() => {
-    const rawData = `rgb(${playerColor})`;
-    let cleanData = "";
-    for (let i = 4; i < rawData.length - 1; i++) {
-      cleanData += rawData[i];
-    }
-    let rgbArray = [];
-    rgbArray = cleanData.split(",");
+  // React.useEffect(() => {
+  //   const rawData = `rgb(${playerColor})`;
+  //   let cleanData = "";
+  //   for (let i = 4; i < rawData.length - 1; i++) {
+  //     cleanData += rawData[i];
+  //   }
+  //   let rgbArray = [];
+  //   rgbArray = cleanData.split(",");
 
-    function componentToHex(c) {
-      var hex = c.toString(16);
-      return hex.length === 1 ? "0" + hex : hex;
-    }
+  //   function componentToHex(c) {
+  //     var hex = c.toString(16);
+  //     return hex.length === 1 ? "0" + hex : hex;
+  //   }
 
-    function rgbToHex(r, g, b) {
-      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-    }
+  //   function rgbToHex(r, g, b) {
+  //     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+  //   }
 
-    setPlayerBg(
-      rgbToHex(
-        parseInt(rgbArray[0]),
-        parseInt(rgbArray[1]),
-        parseInt(rgbArray[2])
-      )
-    );
-  }, [playerColor]);
+  //   setPlayerBg(
+  //     rgbToHex(
+  //       parseInt(rgbArray[0]),
+  //       parseInt(rgbArray[1]),
+  //       parseInt(rgbArray[2])
+  //     )
+  //   );
+  // }, [playerColor]);
 
   try {
     function wallpaperMediaThumbnailListener(event) {
@@ -274,6 +274,12 @@ const Visualizer = () => {
   };
 
   const onPlayer = () => {
+    if (player) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+      setPlaying(false);
+    }
     setPlayer(!player);
   };
 
@@ -518,7 +524,7 @@ const Visualizer = () => {
           left: "16.65%",
           top: "48%",
           height: "22%",
-          backgroundColor: `rgba(${playerColor}, ${playerOpacity})`,
+          backgroundColor: `rgba(236, 72, 153, ${playerOpacity})`,
         }}
       >
         <div className="h-full" style={{ width: "22%" }}>

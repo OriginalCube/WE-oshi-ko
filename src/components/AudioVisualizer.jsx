@@ -20,7 +20,7 @@ const AudioVisualizer = (props) => {
       const whiteSpace = (canvas.width * 0.1) / 47;
       var barWidth = (canvas.width - whiteSpace * 48) / 48;
       // Begin with the left channel in red
-      ctx.fillStyle = "rgb(playerColor)";
+      ctx.fillStyle = playerColor;
       ctx.globalAlpha = playerOpacity;
       // Iterate over the first 64 array elements (0 - 63) for the left channel audio data
       for (let i = 48; i >= 0; --i) {
@@ -44,7 +44,9 @@ const AudioVisualizer = (props) => {
       style={{
         left: "16.65%",
         top: "25.85%",
-        borderBottom: `2px solid rgba(${props.playerColor}, ${props.playerOpacity})`,
+        borderBottom: `2px solid rgba(${props.playerColor}, ${
+          props.playerOpacity / 2
+        })`,
       }}
     />
   );
