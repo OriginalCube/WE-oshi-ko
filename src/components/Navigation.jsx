@@ -30,7 +30,7 @@ const Navigation = (props) => {
   };
 
   const onRemoveVis = () => {
-    props.removeVis();
+    props.onCanvas();
     onSound(1);
   };
 
@@ -57,7 +57,7 @@ const Navigation = (props) => {
             />
           </div>
           <div className="h-full w-full">
-            <img onClick={onRemoveVis} src="./assets/icons/sound.png" alt="" />
+            <img onClick={onVisualizer} src="./assets/icons/sound.png" alt="" />
           </div>
           <div className="h-full w-full">
             <img
@@ -67,11 +67,7 @@ const Navigation = (props) => {
             />
           </div>
           <div className="h-full w-full">
-            <img
-              onClick={onVisualizer}
-              src="./assets/icons/petals.png"
-              alt=""
-            />
+            <img onClick={onRemoveVis} src="./assets/icons/petals.png" alt="" />
           </div>
         </div>
       ) : null}

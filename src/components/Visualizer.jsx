@@ -8,9 +8,6 @@ const Visualizer = (props) => {
   const [textSize, setTextSize] = React.useState(10);
   const [songName, setSongName] = React.useState("");
   const [artistName, setArtistName] = React.useState("");
-  const [player, setPlayer] = React.useState(true);
-  const [bgColor, setBgColor] = React.useState(props.playerColor);
-  const [bgOpacity, setBgOpacity] = React.useState(props.playerOpacity);
   const [mainImage, setMainImage] = React.useState("");
 
   //MUSIC SETTINGS
@@ -216,10 +213,10 @@ const Visualizer = (props) => {
         style={{
           left: "16.65%",
           top: "45.85%",
-          borderBottom: `2px solid rgba(${bgColor}, ${bgOpacity / 2})`,
+          borderBottom: `2px solid rgba(${props.playerColor}, ${props.playerOpacity})`,
         }}
       ></div>
-      {player ? (
+      {props.player ? (
         <input
           className="absolute w-2/3"
           style={{ left: "16.65%", top: "45.1%" }}
@@ -239,7 +236,7 @@ const Visualizer = (props) => {
           left: "16.65%",
           top: "48%",
           height: "22%",
-          backgroundColor: `rgba(${bgColor}, ${bgOpacity})`,
+          backgroundColor: `rgba(${props.playerColor}, ${props.playerOpacity})`,
         }}
       >
         <div className="h-full" style={{ width: "22%" }}>
@@ -254,7 +251,7 @@ const Visualizer = (props) => {
             <VisualizerText />
           </div>
           <div className="w-full h-1/3">
-            {player ? (
+            {props.player ? (
               <VisualizerControls
                 onPlay={onPlay}
                 isPlaying={isPlaying}
