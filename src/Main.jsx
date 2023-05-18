@@ -31,6 +31,7 @@ const Main = () => {
   const [playerColor, setPlayerColor] = React.useState("236, 75, 153");
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
+  const [textSize, setTextSize] = React.useState(10);
 
   React.useEffect(() => {
     console.log(filter);
@@ -62,6 +63,10 @@ const Main = () => {
 
       if (properties.backgroundopacity) {
         setFilterOpacity(properties.backgroundopacity.value / 10);
+      }
+
+      if (properties.textsize) {
+        setTextSize(properties.textsize.value);
       }
 
       //Audio Visualizer
