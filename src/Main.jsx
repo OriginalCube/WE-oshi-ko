@@ -5,13 +5,18 @@ import CanvasBackground from "./components/CanvasBackground";
 import Navigation from "./components/Navigation";
 
 const Main = () => {
-  const [mode, setMode] = React.useState(0);
   const [visualizer, setVisualizer] = React.useState(true);
   const [player, setPlayer] = React.useState(true);
   const [canvas, setCanvas] = React.useState(true);
 
   //Setting Handler
-  const customBg = () => {};
+  const customBg = () => {
+    if (backgroundId < background.length) {
+      setBackgroundId(backgroundId + 1);
+    } else {
+      setBackgroundId(0);
+    }
+  };
 
   const onVisualizer = () => {
     setVisualizer(!visualizer);
@@ -27,10 +32,11 @@ const Main = () => {
   };
 
   //Wallpaper Engine Stuff
-  const [filter, setFilter] = React.useState("0,0,0");
+  const [filter, setFilter] = React.useState("236, 75, 153");
   const [playerColor, setPlayerColor] = React.useState("236, 75, 153");
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
+
   const [background, setBackground] = React.useState([]);
   const [backgroundId, setBackgroundId] = React.useState(0);
   const [mainImage, setMainImage] = React.useState("");
@@ -42,6 +48,8 @@ const Main = () => {
   React.useEffect(() => {
     console.log(filter);
   }, [filter]);
+
+
 
   React.useEffect(() => {
     setBackgroundId(0);
@@ -112,15 +120,13 @@ const Main = () => {
   return (
     <div className="h-screen w-screen">
       {visualizer ? (
-        <AudioVisualizer
-          playerColor={playerColor}
-          playerOpacity={playerOpacity}
-        />
+        <AudioVisualizer playerColor={"playerColor"} playerOpacity={0.5} />
       ) : null}
       <div
         className="absolute w-full h-full"
-        style={{ backgroundColor: `rgb(${filter})`, opacity: filterOpacity }}
+        style={{ backgroundColor: `black` }}
       ></div>
+
       {background ? <img alt="" src={mainImage} /> : null}
       {canvas ? <CanvasBackground canvasId={2} /> : null}
 
@@ -131,6 +137,7 @@ const Main = () => {
         onCanvas={onCanvas}
       />
       <Visualizer
+        textSize={textSize}
         playerColor={playerColor}
         player={player}
         playerOpacity={playerOpacity}

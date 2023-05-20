@@ -71,7 +71,7 @@ const CanvasBackground = (props) => {
 
       let mouseX = 0;
       function touchHandler(e) {
-        mouseX = (e.clientX || e.touches[0].clientX) / window.innerWidth;
+        mouseX = e.clientX / window.innerWidth;
       }
       petalLoad();
       window.addEventListener("mousemove", touchHandler);
