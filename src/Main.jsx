@@ -64,7 +64,7 @@ const Main = () => {
         setFilterOpacity(properties.backgroundopacity.value / 10);
       }
 
-      //Audio Visualizer
+      //Start of Rework
     },
   };
 
