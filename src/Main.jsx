@@ -31,10 +31,17 @@ const Main = () => {
   const [playerColor, setPlayerColor] = React.useState("236, 75, 153");
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
+  const [background, setBackground] = React.useState([]);
+  const [backgroundId, setBackgroundId] = React.useState(0);
+  const [mainImage, setMainImage] = React.useState("");
 
   React.useEffect(() => {
     console.log(filter);
   }, [filter]);
+
+  React.useEffect(() => {
+    setBackgroundId(0);
+  }, [background]);
 
   window.wallpaperPropertyListener = {
     applyUserProperties: function (properties) {
