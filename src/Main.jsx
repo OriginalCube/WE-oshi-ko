@@ -5,13 +5,18 @@ import CanvasBackground from "./components/CanvasBackground";
 import Navigation from "./components/Navigation";
 
 const Main = () => {
-  const [mode, setMode] = React.useState(0);
   const [visualizer, setVisualizer] = React.useState(true);
   const [player, setPlayer] = React.useState(true);
   const [canvas, setCanvas] = React.useState(true);
 
   //Setting Handler
-  const customBg = () => {};
+  const customBg = () => {
+    if (backgroundId < background.length) {
+      setBackgroundId(backgroundId + 1);
+    } else {
+      setBackgroundId(0);
+    }
+  };
 
   const onVisualizer = () => {
     setVisualizer(!visualizer);
@@ -27,65 +32,72 @@ const Main = () => {
   };
 
   //Wallpaper Engine Stuff
-  const [filter, setFilter] = React.useState("0,0,0");
+  const [filter, setFilter] = React.useState("236, 75, 153");
   const [playerColor, setPlayerColor] = React.useState("236, 75, 153");
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
+  const [isPlaying, setIsPlaying] = React.useState(true);
+  const [mainImage, setMainImage] = React.useState("");
+  const [background, setBackground] = React.useState([]);
+  const [backgroundId, setBackgroundId] = React.useState(0);
 
   React.useEffect(() => {
-    console.log(filter);
-  }, [filter]);
+    setMainImage("file:///" + background[backgroundId]);
+  }, [backgroundId, background]);
 
-  window.wallpaperPropertyListener = {
-    applyUserProperties: function (properties) {
-      if (properties.backgroundcolor) {
-        // Convert the custom color to 0 - 255 range for CSS usage
-        let customColor = properties.backgroundcolor.value.split(" ");
-        customColor = customColor.map(function (c) {
-          return Math.ceil(c * 255);
-        });
-        setFilter(customColor);
-      }
+  React.useEffect(() => {
+    setBackgroundId(0);
+  }, [background]);
 
-      if (properties.playercolor) {
-        // Convert the custom color to 0 - 255 range for CSS usage
-        let customColor = properties.playercolor.value.split(" ");
-        customColor = customColor.map(function (c) {
-          return Math.ceil(c * 255);
-        });
-        setPlayerColor(customColor);
-      }
+  React.useEffect(() => {
+    console.log(visualizer);
+  }, [visualizer]);
 
-      if (properties.playeropacity) {
-        setPlayerOpacity(properties.playeropacity.value / 10);
-      }
+  try {
+    window.wallpaperPropertyListener = {
+      applyUserProperties: function (properties) {
+        if (properties.playercolor) {
+          // Convert the custom color to 0 - 255 range for CSS usage
+          let customColor = properties.playercolor.value.split(" ");
+          customColor = customColor.map(function (c) {
+            return Math.ceil(c * 255);
+          });
+          setPlayerColor(customColor);
+        }
 
-      if (properties.backgroundopacity) {
-        setFilterOpacity(properties.backgroundopacity.value / 10);
-      }
+        if (properties.playeropacity) {
+          setPlayerOpacity(properties.playeropacity.value / 10);
+        }
 
-      if (properties.textsize) {
-        setTextSize(properties.textsize.value);
-      }
+        if (properties.backgroundopacity) {
+          console.log(properties.backgroundopacity.value);
+          setFilterOpacity(properties.backgroundopacity.value / 10);
+        }
 
-      //Audio Visualizer
-    },
-  };
+        if (properties.textsize) {
+          setTextSize(properties.textsize.value);
+        }
+
+        //Audio Visualizer
+      },
+    };
+  } catch (ev) {
+    console.log("WE Error");
+  }
 
   return (
     <div className="h-screen w-screen">
       {visualizer ? (
-        <AudioVisualizer
-          playerColor={playerColor}
-          playerOpacity={playerOpacity}
-        />
+        <AudioVisualizer playerColor={"playerColor"} playerOpacity={0.5} />
       ) : null}
       <div
         className="absolute w-full h-full"
-        style={{ backgroundColor: `rgb(${filter})`, opacity: filterOpacity }}
+        style={{ backgroundColor: `black` }}
       ></div>
-      <img alt="" src="" />
+      {background.length !== 0 ? (
+        <img alt="" className="absolute w-full h-full" src={mainImage} />
+      ) : null}
       {canvas ? <CanvasBackground canvasId={2} /> : null}
 
       <Navigation
@@ -95,6 +107,7 @@ const Main = () => {
         onCanvas={onCanvas}
       />
       <Visualizer
+        textSize={textSize}
         playerColor={playerColor}
         player={player}
         playerOpacity={playerOpacity}

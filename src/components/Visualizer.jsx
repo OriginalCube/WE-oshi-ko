@@ -143,6 +143,10 @@ const Visualizer = (props) => {
   };
 
   React.useEffect(() => {
+    setTextSize(props.textSize);
+  }, [props.textSize]);
+
+  React.useEffect(() => {
     audioRef.current.volume = volume;
     localStorage.setItem("volume", volume);
   }, [volume]);
