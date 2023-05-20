@@ -36,55 +36,86 @@ const Main = () => {
   const [playerColor, setPlayerColor] = React.useState("236, 75, 153");
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
-  const [textSize, setTextSize] = React.useState(10);
-  const [isPlaying, setIsPlaying] = React.useState(true);
-  const [mainImage, setMainImage] = React.useState("");
+
   const [background, setBackground] = React.useState([]);
   const [backgroundId, setBackgroundId] = React.useState(0);
+  const [mainImage, setMainImage] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [songName, setSongName] = React.useState("");
+  const [artistName, setArtistName] = React.useState("");
+  const [mediaArt, setMediaArt] = React.useState("");
 
   React.useEffect(() => {
-    setMainImage("file:///" + background[backgroundId]);
-  }, [backgroundId, background]);
+    console.log(filter);
+  }, [filter]);
+
+
 
   React.useEffect(() => {
     setBackgroundId(0);
   }, [background]);
 
   React.useEffect(() => {
-    console.log(visualizer);
-  }, [visualizer]);
+    setMainImage("file:///" + background[backgroundId]);
+  }, [background, backgroundId]);
 
-  try {
-    window.wallpaperPropertyListener = {
-      applyUserProperties: function (properties) {
-        if (properties.playercolor) {
-          // Convert the custom color to 0 - 255 range for CSS usage
-          let customColor = properties.playercolor.value.split(" ");
-          customColor = customColor.map(function (c) {
-            return Math.ceil(c * 255);
-          });
-          setPlayerColor(customColor);
-        }
+  window.wallpaperPropertyListener = {
+    applyUserProperties: function (properties) {
+      if (properties.backgroundcolor) {
+        // Convert the custom color to 0 - 255 range for CSS usage
+        let customColor = properties.backgroundcolor.value.split(" ");
+        customColor = customColor.map(function (c) {
+          return Math.ceil(c * 255);
+        });
+        setFilter(customColor);
+      }
 
-        if (properties.playeropacity) {
-          setPlayerOpacity(properties.playeropacity.value / 10);
-        }
+      if (properties.playercolor) {
+        // Convert the custom color to 0 - 255 range for CSS usage
+        let customColor = properties.playercolor.value.split(" ");
+        customColor = customColor.map(function (c) {
+          return Math.ceil(c * 255);
+        });
+        setPlayerColor(customColor);
+      }
 
-        if (properties.backgroundopacity) {
-          console.log(properties.backgroundopacity.value);
-          setFilterOpacity(properties.backgroundopacity.value / 10);
-        }
+      if (properties.playeropacity) {
+        setPlayerOpacity(properties.playeropacity.value / 10);
+      }
 
-        if (properties.textsize) {
-          setTextSize(properties.textsize.value);
-        }
+      if (properties.backgroundopacity) {
+        setFilterOpacity(properties.backgroundopacity.value / 10);
+      }
 
-        //Audio Visualizer
-      },
-    };
-  } catch (ev) {
-    console.log("WE Error");
+      //Audio Visualizer
+    },
+  };
+
+  //Wallpaper Engine Media Integration
+  // Register the media property listener provided by Wallpaper Engine.
+  function wallpaperMediaPropertiesListener(event) {
+    // Update title and artist labels
+    setSongName(event.title);
+    setArtistName(event.artist);
   }
+
+  function wallpaperMediaThumbnailListener(event) {
+    // Update album cover art
+    setMediaArt(event.thumbnail);
+  }
+
+  React.useEffect(() => {
+    console.log(songName + " " + artistName + " " + mediaArt);
+  }, [songName, artistName, mediaArt]);
+
+  window.wallpaperRegisterMediaPropertiesListener(
+    wallpaperMediaPropertiesListener
+  );
+
+  // Register the media thumbnail listener provided by Wallpaper Engine.
+  window.wallpaperRegisterMediaThumbnailListener(
+    wallpaperMediaThumbnailListener
+  );
 
   return (
     <div className="h-screen w-screen">
@@ -95,9 +126,8 @@ const Main = () => {
         className="absolute w-full h-full"
         style={{ backgroundColor: `black` }}
       ></div>
-      {background.length !== 0 ? (
-        <img alt="" className="absolute w-full h-full" src={mainImage} />
-      ) : null}
+
+      {background ? <img alt="" src={mainImage} /> : null}
       {canvas ? <CanvasBackground canvasId={2} /> : null}
 
       <Navigation
