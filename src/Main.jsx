@@ -34,6 +34,10 @@ const Main = () => {
   const [background, setBackground] = React.useState([]);
   const [backgroundId, setBackgroundId] = React.useState(0);
   const [mainImage, setMainImage] = React.useState("");
+  const [title, setTitle] = React.useState("");
+  const [songName, setSongName] = React.useState("");
+  const [artistName, setArtistName] = React.useState("");
+  const [mediaArt, setMediaArt] = React.useState("");
 
   React.useEffect(() => {
     console.log(filter);
@@ -42,6 +46,10 @@ const Main = () => {
   React.useEffect(() => {
     setBackgroundId(0);
   }, [background]);
+
+  React.useEffect(() => {
+    setMainImage("file:///" + background[backgroundId]);
+  }, [background, backgroundId]);
 
   window.wallpaperPropertyListener = {
     applyUserProperties: function (properties) {
@@ -75,6 +83,32 @@ const Main = () => {
     },
   };
 
+  //Wallpaper Engine Media Integration
+  // Register the media property listener provided by Wallpaper Engine.
+  function wallpaperMediaPropertiesListener(event) {
+    // Update title and artist labels
+    setSongName(event.title);
+    setArtistName(event.artist);
+  }
+
+  function wallpaperMediaThumbnailListener(event) {
+    // Update album cover art
+    setMediaArt(event.thumbnail);
+  }
+
+  React.useEffect(() => {
+    console.log(songName + " " + artistName + " " + mediaArt);
+  }, [songName, artistName, mediaArt]);
+
+  window.wallpaperRegisterMediaPropertiesListener(
+    wallpaperMediaPropertiesListener
+  );
+
+  // Register the media thumbnail listener provided by Wallpaper Engine.
+  window.wallpaperRegisterMediaThumbnailListener(
+    wallpaperMediaThumbnailListener
+  );
+
   return (
     <div className="h-screen w-screen">
       {visualizer ? (
@@ -87,7 +121,7 @@ const Main = () => {
         className="absolute w-full h-full"
         style={{ backgroundColor: `rgb(${filter})`, opacity: filterOpacity }}
       ></div>
-      <img alt="" src="" />
+      {background ? <img alt="" src={mainImage} /> : null}
       {canvas ? <CanvasBackground canvasId={2} /> : null}
 
       <Navigation
