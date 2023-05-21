@@ -10,6 +10,10 @@ const Visualizer = (props) => {
   const [artistName, setArtistName] = React.useState("");
   const [mainImage, setMainImage] = React.useState("");
 
+  React.useEffect(() => {
+    setTextSize(props.textSize);
+  }, [props.textSize]);
+
   //MUSIC SETTINGS
   const [songId, setSongId] = React.useState(
     Math.floor(SongData["songs"].length * Math.random())
