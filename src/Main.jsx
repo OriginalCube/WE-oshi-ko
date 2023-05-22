@@ -11,7 +11,13 @@ const Main = () => {
   const [canvas, setCanvas] = React.useState(true);
 
   //Setting Handler
-  const customBg = () => {};
+  const customBg = () => {
+    if (bgId < bgData.length) {
+      setBgId(bgId + 1);
+    } else {
+      setBgId(0);
+    }
+  };
 
   const onVisualizer = () => {
     setVisualizer(!visualizer);
@@ -32,10 +38,18 @@ const Main = () => {
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
+  //On Demand Variables
+  const [bgData, setBgData] = React.useState([]);
+  const [bgId, setBgId] = React.useState(0);
+  const [imageDisplay, setImageDisplay] = React.useState("");
 
   React.useEffect(() => {
-    console.log(filter);
-  }, [filter]);
+    setImageDisplay("file:///" + bgData[bgId]);
+  }, [bgId]);
+
+  React.useEffect(() => {
+    setBgId(0);
+  }, [bgData]);
 
   window.wallpaperPropertyListener = {
     applyUserProperties: function (properties) {
@@ -71,6 +85,10 @@ const Main = () => {
 
       //Audio Visualizer
     },
+    //WE On Demand
+    userDirectoryFilesAddedOrChanged: function (propertyName, changedFiles) {
+      setBgData(changedFiles);
+    },
   };
 
   return (
@@ -85,7 +103,11 @@ const Main = () => {
         className="absolute w-full h-full"
         style={{ backgroundColor: `rgb(${filter})`, opacity: filterOpacity }}
       ></div>
-      <img alt="" src="" />
+
+      {Array.isArray(bgData) || bgData.length ? (
+        <img alt="" src={imageDisplay} className="absolute h-full w-full" />
+      ) : null}
+
       {canvas ? <CanvasBackground canvasId={2} /> : null}
 
       <Navigation
