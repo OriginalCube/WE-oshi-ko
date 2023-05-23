@@ -13,7 +13,7 @@ const AudioVisualizer = (props) => {
   React.useEffect(() => {
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth * (2 / 3);
-    canvas.height = window.innerHeight * 0.2;
+    canvas.height = window.innerHeight * 0.4;
     let ctx = canvas.getContext("2d");
     function wallpaperAudioListener(audioArray) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -44,7 +44,7 @@ const AudioVisualizer = (props) => {
       className="absolute"
       style={{
         left: "16.65%",
-        top: "25.85%",
+        top: "5.85%",
         borderBottom: `2px solid rgba(${props.playerColor}, ${
           props.playerOpacity / 2
         })`,

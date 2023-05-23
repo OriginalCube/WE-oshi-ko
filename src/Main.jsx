@@ -12,10 +12,14 @@ const Main = () => {
 
   //Setting Handler
   const customBg = () => {
-    if (bgId < bgData.length - 1) {
-      setBgId(bgId + 1);
+    if (Array.isArray(bgData) && bgData.length !== 0) {
+      if (bgId < bgData.length - 1) {
+        setBgId(bgId + 1);
+      } else {
+        setBgId(0);
+      }
     } else {
-      setBgId(0);
+      //If No image data
     }
   };
 
@@ -49,6 +53,7 @@ const Main = () => {
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
   const [uiVolume, setUiVolume] = React.useState(0.3);
+  const [pbOpacity, setPbOpacity] = React.useState(0.5);
   //On Demand Variables
   const [bgData, setBgData] = React.useState([]);
   const [bgId, setBgId] = React.useState(0);
@@ -62,49 +67,57 @@ const Main = () => {
     setBgId(0);
   }, [bgData]);
 
-  window.wallpaperPropertyListener = {
-    applyUserProperties: function (properties) {
-      if (properties.backgroundcolor) {
-        // Convert the custom color to 0 - 255 range for CSS usage
-        let customColor = properties.backgroundcolor.value.split(" ");
-        customColor = customColor.map(function (c) {
-          return Math.ceil(c * 255);
-        });
-        setFilter(customColor);
-      }
+  try {
+    window.wallpaperPropertyListener = {
+      applyUserProperties: function (properties) {
+        if (properties.backgroundcolor) {
+          // Convert the custom color to 0 - 255 range for CSS usage
+          let customColor = properties.backgroundcolor.value.split(" ");
+          customColor = customColor.map(function (c) {
+            return Math.ceil(c * 255);
+          });
+          setFilter(customColor);
+        }
 
-      if (properties.playercolor) {
-        // Convert the custom color to 0 - 255 range for CSS usage
-        let customColor = properties.playercolor.value.split(" ");
-        customColor = customColor.map(function (c) {
-          return Math.ceil(c * 255);
-        });
-        setPlayerColor(customColor);
-      }
+        if (properties.playercolor) {
+          // Convert the custom color to 0 - 255 range for CSS usage
+          let customColor = properties.playercolor.value.split(" ");
+          customColor = customColor.map(function (c) {
+            return Math.ceil(c * 255);
+          });
+          setPlayerColor(customColor);
+        }
 
-      if (properties.playeropacity) {
-        setPlayerOpacity(properties.playeropacity.value / 10);
-      }
+        if (properties.playeropacity) {
+          setPlayerOpacity(properties.playeropacity.value / 10);
+        }
 
-      if (properties.backgroundopacity) {
-        setFilterOpacity(properties.backgroundopacity.value / 10);
-      }
+        if (properties.backgroundopacity) {
+          setFilterOpacity(properties.backgroundopacity.value / 10);
+        }
 
-      if (properties.textsize) {
-        setTextSize(properties.textsize.value);
-      }
+        if (properties.textsize) {
+          setTextSize(properties.textsize.value);
+        }
 
-      if (properties.uivolume) {
-        setUiVolume(properties.uivolume.value / 10);
-      }
+        if (properties.uivolume) {
+          setUiVolume(properties.uivolume.value / 10);
+        }
 
-      //Audio Visualizer
-    },
-    //WE On Demand
-    userDirectoryFilesAddedOrChanged: function (propertyName, changedFiles) {
-      setBgData(changedFiles);
-    },
-  };
+        if (properties.playerbaropacity) {
+          setPbOpacity(properties.playerbaropacity.value / 10);
+        }
+
+        //Audio Visualizer
+      },
+      //WE On Demand
+      userDirectoryFilesAddedOrChanged: function (propertyName, changedFiles) {
+        setBgData(changedFiles);
+      },
+    };
+  } catch (e) {
+    console.log(e);
+  }
 
   //Local Storage
   try {
@@ -149,17 +162,13 @@ const Main = () => {
       {Array.isArray(bgData) && bgData.length ? (
         <img alt="" src={imageDisplay} className="absolute h-full w-full" />
       ) : null}
-      {visualizer ? (
-        <AudioVisualizer
-          playerColor={playerColor}
-          playerOpacity={playerOpacity}
-        />
-      ) : null}
       <div
         className="absolute w-full h-full"
         style={{ backgroundColor: `rgb(${filter})`, opacity: filterOpacity }}
       ></div>
-
+      {visualizer ? (
+        <AudioVisualizer playerColor={playerColor} playerOpacity={pbOpacity} />
+      ) : null}
       {canvas && canvasId !== 0 ? (
         <CanvasBackground canvasId={canvasId} />
       ) : null}
