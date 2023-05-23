@@ -5,14 +5,14 @@ import CanvasBackground from "./components/CanvasBackground";
 import Navigation from "./components/Navigation";
 
 const Main = () => {
-  const [mode, setMode] = React.useState(0);
   const [visualizer, setVisualizer] = React.useState(true);
   const [player, setPlayer] = React.useState(true);
   const [canvas, setCanvas] = React.useState(true);
+  const [canvasId, setCanvasId] = React.useState(0);
 
   //Setting Handler
   const customBg = () => {
-    if (bgId < bgData.length) {
+    if (bgId < bgData.length - 1) {
       setBgId(bgId + 1);
     } else {
       setBgId(0);
@@ -20,16 +20,26 @@ const Main = () => {
   };
 
   const onVisualizer = () => {
+    changeLocalData(1, { visualizer: !visualizer });
     setVisualizer(!visualizer);
   };
 
   const onPlayer = () => {
-    console.log("clicked");
+    changeLocalData(0, { player: !player });
     setPlayer(!player);
   };
 
   const onCanvas = () => {
-    setCanvas(!canvas);
+    let temp = 0;
+    if (canvasId < 2) {
+      setCanvas(true);
+      temp = canvasId + 1;
+      setCanvasId(temp);
+    } else {
+      setCanvasId(0);
+      setCanvas(temp);
+    }
+    changeLocalData(2, { canvasId: temp });
   };
 
   //Wallpaper Engine Stuff
@@ -38,6 +48,7 @@ const Main = () => {
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
+  const [uiVolume, setUiVolume] = React.useState(0.3);
   //On Demand Variables
   const [bgData, setBgData] = React.useState([]);
   const [bgId, setBgId] = React.useState(0);
@@ -45,7 +56,7 @@ const Main = () => {
 
   React.useEffect(() => {
     setImageDisplay("file:///" + bgData[bgId]);
-  }, [bgId]);
+  }, [bgId, bgData]);
 
   React.useEffect(() => {
     setBgId(0);
@@ -83,6 +94,10 @@ const Main = () => {
         setTextSize(properties.textsize.value);
       }
 
+      if (properties.uivolume) {
+        setUiVolume(properties.uivolume.value / 10);
+      }
+
       //Audio Visualizer
     },
     //WE On Demand
@@ -91,8 +106,49 @@ const Main = () => {
     },
   };
 
+  //Local Storage
+  try {
+    React.useEffect(() => {
+      if (localStorage.getItem("oshi-04")) {
+        const localData = JSON.parse(localStorage.getItem("oshi-04"));
+        setPlayer(localData[0].player);
+        setVisualizer(localData[1].visualizer);
+        setCanvasId(localData[2].canvasId);
+      } else {
+        setPlayer(true);
+        setVisualizer(true);
+        setCanvasId(2);
+        localStorage.setItem(
+          "oshi-04",
+          JSON.stringify([
+            { player: true },
+            { visualizer: true },
+            { canvasId: 2 },
+          ])
+        );
+      }
+    }, []);
+  } catch (e) {
+    setPlayer(true);
+    setVisualizer(true);
+    setCanvasId(2);
+    localStorage.setItem(
+      "oshi-04",
+      JSON.stringify([{ player: true }, { visualizer: true }, { canvasId: 2 }])
+    );
+  }
+
+  const changeLocalData = (x, y) => {
+    const localData = JSON.parse(localStorage.getItem("oshi-04"));
+    localData[x] = y;
+    localStorage.setItem("oshi-04", JSON.stringify(localData));
+  };
+
   return (
     <div className="h-screen w-screen">
+      {Array.isArray(bgData) && bgData.length ? (
+        <img alt="" src={imageDisplay} className="absolute h-full w-full" />
+      ) : null}
       {visualizer ? (
         <AudioVisualizer
           playerColor={playerColor}
@@ -104,23 +160,25 @@ const Main = () => {
         style={{ backgroundColor: `rgb(${filter})`, opacity: filterOpacity }}
       ></div>
 
-      {Array.isArray(bgData) || bgData.length ? (
-        <img alt="" src={imageDisplay} className="absolute h-full w-full" />
+      {canvas && canvasId !== 0 ? (
+        <CanvasBackground canvasId={canvasId} />
       ) : null}
-
-      {canvas ? <CanvasBackground canvasId={2} /> : null}
 
       <Navigation
         customBg={customBg}
         onVisualizer={onVisualizer}
         onPlayer={onPlayer}
         onCanvas={onCanvas}
+        canvasId={canvasId}
+        uiVolume={uiVolume}
       />
       <Visualizer
         textSize={textSize}
         playerColor={playerColor}
         player={player}
         playerOpacity={playerOpacity}
+        uiVolume={uiVolume}
+        customBg={customBg}
       />
     </div>
   );

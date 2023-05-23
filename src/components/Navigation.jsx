@@ -2,7 +2,15 @@ import React from "react";
 
 const Navigation = (props) => {
   const [setting, setSetting] = React.useState(false);
+  const [uiVolume, setUiVolume] = React.useState(0.5);
+
+  React.useEffect(() => {
+    setUiVolume(props.uiVolume);
+  }, [props.uiVolume]);
+
   let audioPlayer = new Audio();
+
+  const canvasData = ["water", "petals", "broom"];
 
   const onSound = (e) => {
     if (e === 1) {
@@ -10,7 +18,7 @@ const Navigation = (props) => {
     } else {
       audioPlayer.src = "./assets/audios/notes.mp3";
     }
-    audioPlayer.volume = 0.3;
+    audioPlayer.volume = uiVolume;
     audioPlayer.play();
   };
 
@@ -67,7 +75,11 @@ const Navigation = (props) => {
             />
           </div>
           <div className="h-full w-full">
-            <img onClick={onRemoveVis} src="./assets/icons/petals.png" alt="" />
+            <img
+              onClick={onRemoveVis}
+              src={`./assets/icons/${canvasData[props.canvasId]}.png`}
+              alt=""
+            />
           </div>
         </div>
       ) : null}

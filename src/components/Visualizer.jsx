@@ -9,6 +9,7 @@ const Visualizer = (props) => {
   const [songName, setSongName] = React.useState("");
   const [artistName, setArtistName] = React.useState("");
   const [mainImage, setMainImage] = React.useState("");
+  const [bgLock, setBgLock] = React.useState(false);
 
   React.useEffect(() => {
     setTextSize(props.textSize);
@@ -35,10 +36,16 @@ const Visualizer = (props) => {
   const isReady = React.useRef(true);
   const { duration } = audioRef.current;
 
+  const [uiVolume, setUiVolume] = React.useState(0.5);
+
+  React.useEffect(() => {
+    setUiVolume(props.uiVolume);
+  }, [props.uiVolume]);
+
   let keypress = new Audio();
   const clickAudio = (e) => {
     keypress.src = `./assets/audios/${e === 0 ? "keypress" : "notes"}.mp3`;
-    keypress.volume = 0.5;
+    keypress.volume = uiVolume;
     keypress.play();
   };
 
@@ -89,6 +96,9 @@ const Visualizer = (props) => {
       } else {
         setSongId(0);
       }
+    }
+    if (!bgLock) {
+      props.customBg();
     }
     clickAudio(0);
   };
@@ -141,6 +151,11 @@ const Visualizer = (props) => {
     clickAudio(0);
   };
 
+  const onLock = () => {
+    setBgLock(!bgLock);
+    clickAudio(0);
+  };
+
   const changeSong = (ev) => {
     setSongId(ev);
     clickAudio(1);
@@ -157,6 +172,9 @@ const Visualizer = (props) => {
       startTimer();
     } else {
       audioRef.current.play();
+      setArtistName(SongData["songs"][songId].artist);
+      setSongName(SongData["songs"][songId].name);
+      setMainImage(SongData["songs"][songId].image);
     }
   }, [isPlaying]);
 
@@ -185,6 +203,16 @@ const Visualizer = (props) => {
     };
   }, []);
 
+  React.useEffect(() => {
+    if (props.player) {
+      audioRef.current.play();
+      setPlaying(false);
+    } else {
+      audioRef.current.pause();
+      setPlaying(true);
+    }
+  }, [props.player]);
+
   //static section
   const VisualizerText = () => (
     <>
@@ -210,6 +238,35 @@ const Visualizer = (props) => {
       </p>
     </>
   );
+
+  //WE Album inputs
+  function wallpaperMediaPropertiesListener(event) {
+    // Update title and artist labels
+    if (isPlaying) {
+      setSongName(event.title);
+      setArtistName(event.artist);
+    }
+  }
+
+  function wallpaperMediaThumbnailListener(event) {
+    // Update album cover art
+    if (isPlaying) {
+      setMainImage(event.thumbnail);
+    }
+  }
+
+  try {
+    // Register the media property listener provided by Wallpaper Engine.
+    window.wallpaperRegisterMediaPropertiesListener(
+      wallpaperMediaPropertiesListener
+    );
+
+    // Register the media thumbnail listener provided by Wallpaper Engine.
+    window.wallpaperRegisterMediaThumbnailListener(
+      wallpaperMediaThumbnailListener
+    );
+  } catch (e) {}
+
   return (
     <>
       <div
@@ -268,6 +325,7 @@ const Visualizer = (props) => {
                 onRepeat={onRepeat}
                 repeat={repeat}
                 onPlaylist={onPlaylist}
+                onLock={onLock}
               />
             ) : null}
           </div>
