@@ -104,10 +104,6 @@ const Main = () => {
           setUiVolume(properties.uivolume.value / 10);
         }
 
-        if (properties.playerbaropacity) {
-          setPbOpacity(properties.playerbaropacity.value / 10);
-        }
-
         //Audio Visualizer
       },
       //WE On Demand

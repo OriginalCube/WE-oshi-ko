@@ -69,13 +69,14 @@ const CanvasBackground = (props) => {
         window.requestAnimationFrame(render);
       }
 
-      let mouseX = 0;
-      function touchHandler(e) {
-        mouseX = (e.clientX || e.touches[0].clientX) / window.innerWidth;
-      }
+      let mouseX = 0.5;
+      // function touchHandler(e) {
+      //   mouseX = (e.clientX || e.touches[0].clientX) / window.innerWidth;
+      //   console.log(mouseX);
+      // }
+      // window.addEventListener("mousemove", touchHandler);
+      // window.addEventListener("touchmove", touchHandler);
       petalLoad();
-      window.addEventListener("mousemove", touchHandler);
-      window.addEventListener("touchmove", touchHandler);
     }
 
     function animateRain() {
