@@ -35,7 +35,7 @@ const Main = () => {
 
   const onCanvas = () => {
     let temp = 0;
-    if (canvasId < 2) {
+    if (canvasId < 1) {
       setCanvas(true);
       temp = canvasId + 1;
       setCanvasId(temp);
@@ -53,7 +53,6 @@ const Main = () => {
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
   const [uiVolume, setUiVolume] = React.useState(0.3);
-  const [pbOpacity, setPbOpacity] = React.useState(0.5);
   //On Demand Variables
   const [bgData, setBgData] = React.useState([]);
   const [bgId, setBgId] = React.useState(0);
@@ -163,7 +162,10 @@ const Main = () => {
         style={{ backgroundColor: `rgb(${filter})`, opacity: filterOpacity }}
       ></div>
       {visualizer ? (
-        <AudioVisualizer playerColor={playerColor} playerOpacity={pbOpacity} />
+        <AudioVisualizer
+          playerColor={playerColor}
+          playerOpacity={playerOpacity}
+        />
       ) : null}
       {canvas && canvasId !== 0 ? (
         <CanvasBackground canvasId={canvasId} />

@@ -10,7 +10,7 @@ const Navigation = (props) => {
 
   let audioPlayer = new Audio();
 
-  const canvasData = ["water", "petals", "broom"];
+  const canvasData = ["water", "broom"];
 
   const onSound = (e) => {
     if (e === 1) {
