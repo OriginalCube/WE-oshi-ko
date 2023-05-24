@@ -240,32 +240,32 @@ const Visualizer = (props) => {
   );
 
   //WE Album inputs
-  function wallpaperMediaPropertiesListener(event) {
-    // Update title and artist labels
-    if (isPlaying) {
-      setSongName(event.title);
-      setArtistName(event.artist);
-    }
-  }
+  // function wallpaperMediaPropertiesListener(event) {
+  //   // Update title and artist labels
+  //   if (isPlaying) {
+  //     setSongName(event.title);
+  //     setArtistName(event.artist);
+  //   }
+  // }
 
-  function wallpaperMediaThumbnailListener(event) {
-    // Update album cover art
-    if (isPlaying) {
-      setMainImage(event.thumbnail);
-    }
-  }
+  // function wallpaperMediaThumbnailListener(event) {
+  //   // Update album cover art
+  //   if (isPlaying) {
+  //     setMainImage(event.thumbnail);
+  //   }
+  // }
 
-  try {
-    // Register the media property listener provided by Wallpaper Engine.
-    window.wallpaperRegisterMediaPropertiesListener(
-      wallpaperMediaPropertiesListener
-    );
+  // try {
+  //   // Register the media property listener provided by Wallpaper Engine.
+  //   window.wallpaperRegisterMediaPropertiesListener(
+  //     wallpaperMediaPropertiesListener
+  //   );
 
-    // Register the media thumbnail listener provided by Wallpaper Engine.
-    window.wallpaperRegisterMediaThumbnailListener(
-      wallpaperMediaThumbnailListener
-    );
-  } catch (e) {}
+  //   // Register the media thumbnail listener provided by Wallpaper Engine.
+  //   window.wallpaperRegisterMediaThumbnailListener(
+  //     wallpaperMediaThumbnailListener
+  //   );
+  // } catch (e) {}
 
   return (
     <>

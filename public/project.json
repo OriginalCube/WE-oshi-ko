@@ -1,0 +1,78 @@
+{
+  "file": "index.html",
+  "general": {
+    "properties": {
+      "backgroundimages": {
+        "index": 0,
+        "mode": "fetchall",
+        "order": 100,
+        "text": "Background Images",
+        "type": "directory"
+      },
+      "backgroundcolor": {
+        "index": 1,
+        "order": 101,
+        "text": "Filter Color",
+        "type": "color",
+        "value": "0 0 0"
+      },
+      "backgroundopacity": {
+        "fraction": true,
+        "index": 2,
+        "max": 10,
+        "min": 0,
+        "order": 102,
+        "text": "Background Opacity",
+        "type": "slider",
+        "value": 5
+      },
+      "playercolor": {
+        "index": 3,
+        "order": 103,
+        "text": "Player Background Color",
+        "type": "color",
+        "value": "0.9254901960784314 0.2823529411764706 0.6"
+      },
+      "playeropacity": {
+        "fraction": true,
+        "index": 4,
+        "max": 10,
+        "min": 1,
+        "order": 104,
+        "text": "Player Opacity",
+        "type": "slider",
+        "value": 10
+      },
+      "textsize": {
+        "fraction": true,
+        "index": 6,
+        "max": 20,
+        "min": 1,
+        "order": 106,
+        "text": "Wallpaper Text Sizes",
+        "type": "slider",
+        "value": 10
+      },
+      "uivolume": {
+        "fraction": true,
+        "index": 7,
+        "max": 10,
+        "min": 0,
+        "order": 107,
+        "text": "UI Volume",
+        "type": "slider",
+        "value": 5
+      },
+      "schemecolor": {
+        "order": 0,
+        "text": "ui_browse_properties_scheme_color",
+        "type": "color",
+        "value": "0 0 0"
+      }
+    },
+    "supportsaudioprocessing": true
+  },
+  "title": "Oshi no Ko",
+  "type": "web",
+  "version": 0
+}
