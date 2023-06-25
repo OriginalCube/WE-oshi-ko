@@ -10,6 +10,7 @@ const Visualizer = (props) => {
   const [artistName, setArtistName] = React.useState("");
   const [mainImage, setMainImage] = React.useState("");
   const [bgLock, setBgLock] = React.useState(false);
+  const [baseSize, setBaseSize] = React.useState(1);
 
   React.useEffect(() => {
     setTextSize(props.textSize);
@@ -197,6 +198,10 @@ const Visualizer = (props) => {
   }, [songId]);
 
   React.useEffect(() => {
+    if (window.innerWidth <= 1366) {
+      console.log(window.innerWidth);
+      setBaseSize(0.75);
+    }
     return () => {
       audioRef.current.pause();
       clearInterval(intervalRef.current);
@@ -219,9 +224,9 @@ const Visualizer = (props) => {
       <p
         className="song-title font-semibold text-white opacity-80 spotify-regular overflow-visible"
         style={{
-          fontSize: `${0.6 * textSize}rem`,
-          marginTop: `${0.3 * textSize}rem`,
-          marginLeft: `${0.125 * textSize}rem`,
+          fontSize: `${0.6 * (baseSize * textSize)}rem`,
+          marginTop: `${0.3 * (baseSize * textSize)}rem`,
+          marginLeft: `${0.125 * (baseSize * textSize)}rem`,
         }}
       >
         {songName.substring(0, 12).toUpperCase()}
@@ -229,9 +234,9 @@ const Visualizer = (props) => {
       <p
         className="font-extrathin text-white opacity-70 spotify-regular"
         style={{
-          fontSize: `${0.175 * textSize}rem`,
-          marginTop: `${0.2 * textSize}rem`,
-          marginLeft: `${0.125 * textSize}rem`,
+          fontSize: `${0.175 * (baseSize * textSize)}rem`,
+          marginTop: `${0.125 * (baseSize * textSize)}rem`,
+          marginLeft: `${0.125 * (baseSize * textSize)}rem`,
         }}
       >
         {artistName.substring(0, 12).toUpperCase()}
@@ -302,7 +307,11 @@ const Visualizer = (props) => {
       >
         <div className="h-full" style={{ width: "22%" }}>
           {playlist ? (
-            <Playlist textSize={textSize} changeSong={changeSong} />
+            <Playlist
+              textSize={textSize}
+              baseSize={baseSize}
+              changeSong={changeSong}
+            />
           ) : (
             <img className="h-full w-full" src={mainImage} alt="" />
           )}

@@ -35,7 +35,7 @@ const Main = () => {
 
   const onCanvas = () => {
     let temp = 0;
-    if (canvasId < 1) {
+    if (canvasId < 2) {
       setCanvas(true);
       temp = canvasId + 1;
       setCanvasId(temp);
