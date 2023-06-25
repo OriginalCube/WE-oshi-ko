@@ -82,7 +82,7 @@ const CanvasBackground = (props) => {
       let w = window.innerWidth;
       let h = window.innerHeight;
       var init = [];
-      var maxParts = 500;
+      var maxParts = 225;
       for (var a = 0; a < maxParts; a++) {
         init.push({
           x: Math.random() * window.innerWidth,
