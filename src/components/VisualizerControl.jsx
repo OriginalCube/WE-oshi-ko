@@ -70,14 +70,6 @@ const VisualizerControl = (props) => {
           alt=""
         />
       </div>
-      <div className=" h-5/6 w-auto">
-        <img
-          onClick={props.onLock}
-          className="w-full h-full"
-          src={`./assets/icons/padlock.png`}
-          alt=""
-        />
-      </div>
     </div>
   );
 };

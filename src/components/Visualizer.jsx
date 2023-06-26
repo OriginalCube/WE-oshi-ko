@@ -11,10 +11,19 @@ const Visualizer = (props) => {
   const [mainImage, setMainImage] = React.useState("");
   const [bgLock, setBgLock] = React.useState(false);
   const [baseSize, setBaseSize] = React.useState(1);
+  const [playerColor, setPlayerColor] = React.useState(props.playerColor);
 
   React.useEffect(() => {
     setTextSize(props.textSize);
   }, [props.textSize]);
+
+  React.useEffect(() => {
+    if (props.colorPreset === 0) {
+      setPlayerColor(props.playerColor);
+    } else {
+      setPlayerColor(props.colorHex[props.colorPreset - 1]);
+    }
+  }, [props.colorPreset]);
 
   //MUSIC SETTINGS
   const [songId, setSongId] = React.useState(
@@ -152,11 +161,6 @@ const Visualizer = (props) => {
     clickAudio(0);
   };
 
-  const onLock = () => {
-    setBgLock(!bgLock);
-    clickAudio(0);
-  };
-
   const changeSong = (ev) => {
     setSongId(ev);
     clickAudio(1);
@@ -198,7 +202,7 @@ const Visualizer = (props) => {
   }, [songId]);
 
   React.useEffect(() => {
-    if (window.innerWidth <= 1366) {
+    if (window.innerWidth <= 1370) {
       console.log(window.innerWidth);
       setBaseSize(0.75);
     }
@@ -279,7 +283,7 @@ const Visualizer = (props) => {
         style={{
           left: "16.65%",
           top: "45.85%",
-          borderBottom: `2px solid rgba(${props.playerColor}, ${props.playerOpacity})`,
+          borderBottom: `2px solid rgba(${playerColor}, ${props.playerOpacity})`,
         }}
       ></div>
       {props.player ? (
@@ -302,7 +306,7 @@ const Visualizer = (props) => {
           left: "16.65%",
           top: "48%",
           height: "22%",
-          backgroundColor: `rgba(${props.playerColor}, ${props.playerOpacity})`,
+          backgroundColor: `rgba(${playerColor}, ${props.playerOpacity})`,
         }}
       >
         <div className="h-full" style={{ width: "22%" }}>
@@ -334,7 +338,6 @@ const Visualizer = (props) => {
                 onRepeat={onRepeat}
                 repeat={repeat}
                 onPlaylist={onPlaylist}
-                onLock={onLock}
               />
             ) : null}
           </div>

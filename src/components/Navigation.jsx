@@ -47,6 +47,11 @@ const Navigation = (props) => {
     onSound(0);
   };
 
+  const onColorPreset = () => {
+    props.onColorPreset();
+    onSound(1);
+  };
+
   return (
     <>
       <img
@@ -78,6 +83,13 @@ const Navigation = (props) => {
             <img
               onClick={onRemoveVis}
               src={`./assets/icons/${canvasData[props.canvasId]}.png`}
+              alt=""
+            />
+          </div>
+          <div className="h-full w-full">
+            <img
+              onClick={onColorPreset}
+              src={`./assets/icons/${props.colorPresets}.png`}
               alt=""
             />
           </div>

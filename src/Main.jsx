@@ -9,6 +9,9 @@ const Main = () => {
   const [player, setPlayer] = React.useState(true);
   const [canvas, setCanvas] = React.useState(true);
   const [canvasId, setCanvasId] = React.useState(0);
+  const [colorPreset, setColorPreset] = React.useState(0);
+  const colorPresets = ["blue", "red", "pink", "default"];
+  const colorHex = ["37,99,235", "225,29,73", "236,72,153"];
 
   //Setting Handler
   const customBg = () => {
@@ -44,6 +47,14 @@ const Main = () => {
       setCanvas(temp);
     }
     changeLocalData(2, { canvasId: temp });
+  };
+
+  const onColorPreset = () => {
+    if (colorPreset + 1 < colorPresets.length) {
+      setColorPreset(colorPreset + 1);
+    } else {
+      setColorPreset(0);
+    }
   };
 
   //Wallpaper Engine Stuff
@@ -165,6 +176,8 @@ const Main = () => {
         <AudioVisualizer
           playerColor={playerColor}
           playerOpacity={playerOpacity}
+          colorPreset={colorPreset}
+          colorHex={colorHex}
         />
       ) : null}
       {canvas && canvasId !== 0 ? (
@@ -178,10 +191,14 @@ const Main = () => {
         onCanvas={onCanvas}
         canvasId={canvasId}
         uiVolume={uiVolume}
+        onColorPreset={onColorPreset}
+        colorPresets={colorPresets[colorPreset]}
       />
       <Visualizer
         textSize={textSize}
         playerColor={playerColor}
+        colorPreset={colorPreset}
+        colorHex={colorHex}
         player={player}
         playerOpacity={playerOpacity}
         uiVolume={uiVolume}

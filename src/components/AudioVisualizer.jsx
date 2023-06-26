@@ -11,6 +11,14 @@ const AudioVisualizer = (props) => {
   }, [props.playerOpacity, props.playerColor]);
 
   React.useEffect(() => {
+    if (props.colorPreset === 0) {
+      setPlayerColor(props.playerColor);
+    } else {
+      setPlayerColor(props.colorHex[props.colorPreset - 1]);
+    }
+  }, [props.colorPreset]);
+
+  React.useEffect(() => {
     try {
       const canvas = canvasRef.current;
       canvas.width = window.innerWidth * (2 / 3);
