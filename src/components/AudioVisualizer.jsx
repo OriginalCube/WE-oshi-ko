@@ -2,13 +2,12 @@ import React from "react";
 
 const AudioVisualizer = (props) => {
   const canvasRef = React.useRef(null);
-  const [playerColor, setPlayerColor] = React.useState("#ec4899");
+  const [playerColor, setPlayerColor] = React.useState(props.playerColor);
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
 
   React.useEffect(() => {
-    setPlayerColor(props.playerColor);
     setPlayerOpacity(props.playerOpacity);
-  }, [props.playerOpacity, props.playerColor]);
+  }, [props.playerOpacity]);
 
   React.useEffect(() => {
     if (props.colorPreset === 0) {

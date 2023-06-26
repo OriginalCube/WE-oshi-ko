@@ -153,6 +153,7 @@ const Main = () => {
   //Local Storage
   try {
     React.useEffect(() => {
+      let isWorking = true;
       if (localStorage.getItem("oshi-04")) {
         const localData = JSON.parse(localStorage.getItem("oshi-04"));
         setPlayer(localData.player);
@@ -160,7 +161,11 @@ const Main = () => {
         setCanvasId(localData.canvasId);
         setBgId(localData.bgId);
         setColorPreset(localData.colorId);
-      } else {
+        if (localData.colorId === undefined) {
+          isWorking = false;
+        }
+      }
+      if (!isWorking) {
         setPlayer(true);
         setVisualizer(true);
         setCanvasId(2);
@@ -182,6 +187,8 @@ const Main = () => {
     setPlayer(true);
     setVisualizer(true);
     setCanvasId(2);
+    setBgId(0);
+    setColorPreset(0);
     localStorage.setItem(
       "oshi-04",
       JSON.stringify({
