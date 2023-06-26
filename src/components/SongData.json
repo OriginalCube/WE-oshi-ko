@@ -30,5 +30,14 @@
       "music": "./assets/songs/startttrain.mp3",
       "artist": "B-KOMACHI"
     }
-  ]
+  ],
+  "colorPreset": ["pink", "blue", "red", "purple", "yellow", "default"],
+  "colorHex": [
+    "236,72,153",
+    "37,99,235",
+    "225,29,73",
+    "147,51,234",
+    "217,119,6"
+  ],
+  "imagePresets": ["Ai", "Ruby", "Aqua", "Kana", "Akane", "Mem-cho"]
 }

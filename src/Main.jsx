@@ -3,6 +3,7 @@ import Visualizer from "./components/Visualizer";
 import AudioVisualizer from "./components/AudioVisualizer";
 import CanvasBackground from "./components/CanvasBackground";
 import Navigation from "./components/Navigation";
+import SongData from "./components/SongData.json";
 
 const Main = () => {
   const [visualizer, setVisualizer] = React.useState(true);
@@ -10,29 +11,44 @@ const Main = () => {
   const [canvas, setCanvas] = React.useState(true);
   const [canvasId, setCanvasId] = React.useState(0);
   const [colorPreset, setColorPreset] = React.useState(0);
-  const colorPresets = ["blue", "red", "pink", "default"];
-  const colorHex = ["37,99,235", "225,29,73", "236,72,153"];
+  const colorPresets = SongData.colorPreset;
+  const colorHex = SongData.colorHex;
+  const imagePresets = SongData.imagePresets;
 
   //Setting Handler
   const customBg = () => {
-    if (Array.isArray(bgData) && bgData.length !== 0) {
+    let temp = 0;
+    if (
+      bgId > imagePresets.length - 1 &&
+      Array.isArray(bgData) &&
+      bgData.length !== 0
+    ) {
       if (bgId < bgData.length - 1) {
-        setBgId(bgId + 1);
+        temp = imagePresets.length - 1 + 1;
       } else {
-        setBgId(0);
+        temp = 0;
       }
     } else {
-      //If No image data
+      if (
+        bgId < imagePresets.length - 1 &&
+        !(Array.isArray(bgData) && bgData.length !== 0)
+      ) {
+        temp = bgId + 1;
+      } else {
+        temp = 0;
+      }
     }
+    setBgId(temp);
+    changeLocalData("bgId", temp);
   };
 
   const onVisualizer = () => {
-    changeLocalData(1, { visualizer: !visualizer });
+    changeLocalData("visualizer", !visualizer);
     setVisualizer(!visualizer);
   };
 
   const onPlayer = () => {
-    changeLocalData(0, { player: !player });
+    changeLocalData("player", !player);
     setPlayer(!player);
   };
 
@@ -46,15 +62,18 @@ const Main = () => {
       setCanvasId(0);
       setCanvas(temp);
     }
-    changeLocalData(2, { canvasId: temp });
+    changeLocalData("canvasId", temp);
   };
 
   const onColorPreset = () => {
+    let temp = 0;
     if (colorPreset + 1 < colorPresets.length) {
-      setColorPreset(colorPreset + 1);
+      temp = colorPreset + 1;
     } else {
-      setColorPreset(0);
+      temp = 0;
     }
+    setColorPreset(temp);
+    changeLocalData("colorId", temp);
   };
 
   //Wallpaper Engine Stuff
@@ -76,6 +95,12 @@ const Main = () => {
   React.useEffect(() => {
     setBgId(0);
   }, [bgData]);
+
+  const changeLocalData = (x, y) => {
+    let localData = JSON.parse(localStorage.getItem("oshi-04"));
+    localData[x] = y;
+    localStorage.setItem("oshi-04", JSON.stringify(localData));
+  };
 
   try {
     window.wallpaperPropertyListener = {
@@ -130,20 +155,26 @@ const Main = () => {
     React.useEffect(() => {
       if (localStorage.getItem("oshi-04")) {
         const localData = JSON.parse(localStorage.getItem("oshi-04"));
-        setPlayer(localData[0].player);
-        setVisualizer(localData[1].visualizer);
-        setCanvasId(localData[2].canvasId);
+        setPlayer(localData.player);
+        setVisualizer(localData.visualizer);
+        setCanvasId(localData.canvasId);
+        setBgId(localData.bgId);
+        setColorPreset(localData.colorId);
       } else {
         setPlayer(true);
         setVisualizer(true);
         setCanvasId(2);
+        setBgId(0);
+        setColorPreset(0);
         localStorage.setItem(
           "oshi-04",
-          JSON.stringify([
-            { player: true },
-            { visualizer: true },
-            { canvasId: 2 },
-          ])
+          JSON.stringify({
+            player: true,
+            visualizer: true,
+            canvasId: 2,
+            bgId: 0,
+            colorId: 0,
+          })
         );
       }
     }, []);
@@ -153,18 +184,23 @@ const Main = () => {
     setCanvasId(2);
     localStorage.setItem(
       "oshi-04",
-      JSON.stringify([{ player: true }, { visualizer: true }, { canvasId: 2 }])
+      JSON.stringify({
+        player: true,
+        visualizer: true,
+        canvasId: 2,
+        bgId: 0,
+        colorId: 0,
+      })
     );
   }
 
-  const changeLocalData = (x, y) => {
-    const localData = JSON.parse(localStorage.getItem("oshi-04"));
-    localData[x] = y;
-    localStorage.setItem("oshi-04", JSON.stringify(localData));
-  };
-
   return (
     <div className="h-screen w-screen">
+      <img
+        src={`./assets/background/${imagePresets[bgId]}.png`}
+        className="absolute h-full w-full object-fill"
+        alt=""
+      />
       {Array.isArray(bgData) && bgData.length ? (
         <img alt="" src={imageDisplay} className="absolute h-full w-full" />
       ) : null}
