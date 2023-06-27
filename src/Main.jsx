@@ -41,14 +41,9 @@ const Main = () => {
         temp = 0;
       }
     }
-    console.log(temp);
     setBgId(temp);
     changeLocalData("bgId", temp);
   };
-
-  React.useEffect(() => {
-    console.log(bgId);
-  }, [bgId]);
 
   const onVisualizer = () => {
     changeLocalData("visualizer", !visualizer);
@@ -86,14 +81,13 @@ const Main = () => {
 
   //Wallpaper Engine Stuff
   const [filter, setFilter] = React.useState("0,0,0");
-  const [playerColor, setPlayerColor] = React.useState("236, 75, 153");
+  const [playerColor, setPlayerColor] = React.useState("236,72,153");
   const [playerOpacity, setPlayerOpacity] = React.useState(0.5);
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
   const [uiVolume, setUiVolume] = React.useState(0.3);
 
   React.useEffect(() => {
-    console.log(bgData);
     setBgId(0);
   }, [bgData]);
 
@@ -102,10 +96,6 @@ const Main = () => {
     localData[x] = y;
     localStorage.setItem("oshi-04", JSON.stringify(localData));
   };
-
-  React.useEffect(() => {
-    console.log(playerColor);
-  }, [playerColor]);
 
   try {
     window.wallpaperPropertyListener = {
@@ -154,6 +144,10 @@ const Main = () => {
   } catch (e) {
     console.log(e);
   }
+
+  React.useEffect(() => {
+    console.log(playerColor);
+  }, [playerColor]);
 
   //Local Storage
   try {

@@ -15,7 +15,7 @@ const AudioVisualizer = (props) => {
     } else {
       setPlayerColor(props.colorHex[props.colorPreset - 1]);
     }
-  }, [props.colorPreset]);
+  }, [props.colorPreset, props.playerColor]);
 
   React.useEffect(() => {
     try {
