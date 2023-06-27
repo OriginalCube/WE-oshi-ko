@@ -25,6 +25,10 @@ const Visualizer = (props) => {
     }
   }, [props.colorPreset]);
 
+  React.useEffect(() => {
+    console.log(playerColor);
+  }, [playerColor]);
+
   //MUSIC SETTINGS
   const [songId, setSongId] = React.useState(
     Math.floor(SongData["songs"].length * Math.random())

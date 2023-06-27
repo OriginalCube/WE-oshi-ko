@@ -11,36 +11,44 @@ const Main = () => {
   const [canvas, setCanvas] = React.useState(true);
   const [canvasId, setCanvasId] = React.useState(0);
   const [colorPreset, setColorPreset] = React.useState(0);
+  const [bgId, setBgId] = React.useState(0);
   const colorPresets = SongData.colorPreset;
   const colorHex = SongData.colorHex;
   const imagePresets = SongData.imagePresets;
+  //On Demand Variables
+  const [bgData, setBgData] = React.useState([]);
+  const [imageDisplay, setImageDisplay] = React.useState("");
 
   //Setting Handler
   const customBg = () => {
     let temp = 0;
-    if (
-      bgId > imagePresets.length - 1 &&
-      Array.isArray(bgData) &&
-      bgData.length !== 0
-    ) {
-      if (bgId < bgData.length - 1) {
-        temp = imagePresets.length - 1 + 1;
-      } else {
-        temp = 0;
-      }
+    if (bgId < imagePresets.length - 1) {
+      temp = bgId + 1;
     } else {
       if (
-        bgId < imagePresets.length - 1 &&
-        !(Array.isArray(bgData) && bgData.length !== 0)
+        //If it exceeds the presets and has custom bg
+        bgId > imagePresets.length - 2 &&
+        Array.isArray(bgData) &&
+        bgData.length !== 0
       ) {
-        temp = bgId + 1;
+        if (bgId < imagePresets.length + bgData.length - 1) {
+          temp = bgId + 1;
+          setImageDisplay("file:///" + bgData[temp - imagePresets.length]);
+        } else {
+          temp = 0;
+        }
       } else {
         temp = 0;
       }
     }
+    console.log(temp);
     setBgId(temp);
     changeLocalData("bgId", temp);
   };
+
+  React.useEffect(() => {
+    console.log(bgId);
+  }, [bgId]);
 
   const onVisualizer = () => {
     changeLocalData("visualizer", !visualizer);
@@ -83,16 +91,9 @@ const Main = () => {
   const [filterOpacity, setFilterOpacity] = React.useState(0.5);
   const [textSize, setTextSize] = React.useState(10);
   const [uiVolume, setUiVolume] = React.useState(0.3);
-  //On Demand Variables
-  const [bgData, setBgData] = React.useState([]);
-  const [bgId, setBgId] = React.useState(0);
-  const [imageDisplay, setImageDisplay] = React.useState("");
 
   React.useEffect(() => {
-    setImageDisplay("file:///" + bgData[bgId]);
-  }, [bgId, bgData]);
-
-  React.useEffect(() => {
+    console.log(bgData);
     setBgId(0);
   }, [bgData]);
 
@@ -101,6 +102,10 @@ const Main = () => {
     localData[x] = y;
     localStorage.setItem("oshi-04", JSON.stringify(localData));
   };
+
+  React.useEffect(() => {
+    console.log(playerColor);
+  }, [playerColor]);
 
   try {
     window.wallpaperPropertyListener = {
@@ -165,7 +170,7 @@ const Main = () => {
           isWorking = false;
         }
       }
-      if (!isWorking) {
+      if (!isWorking || !localStorage.getItem("oshi-04")) {
         setPlayer(true);
         setVisualizer(true);
         setCanvasId(2);
@@ -208,7 +213,9 @@ const Main = () => {
         className="absolute h-full w-full object-fill"
         alt=""
       />
-      {Array.isArray(bgData) && bgData.length ? (
+      {bgId > imagePresets.length - 1 &&
+      Array.isArray(bgData) &&
+      bgData.length ? (
         <img alt="" src={imageDisplay} className="absolute h-full w-full" />
       ) : null}
       <div
