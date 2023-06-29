@@ -13,6 +13,39 @@
       "artist": "QUEEN BEE"
     },
     {
+      "name": "FULL MOON",
+      "image": "./assets/images/Mephisto.jpg",
+      "music": "./assets/songs/Full moon.mp3",
+      "artist": "ARIMA KANA"
+    },
+    {
+      "name": "PIYEON BOOT DANCE",
+      "image": "./assets/images/Mephisto.jpg",
+      "music": "./assets/songs/Piyeon Boot Dance.mp3",
+      "artist": "PIYEON"
+    },
+    {
+      "name": "SIGN♡B",
+      "special": "New Arrange Ver.",
+      "image": "./assets/images/signb.jpg",
+      "music": "./assets/songs/sign b.mp3",
+      "artist": "B-KOMACHI"
+    },
+    {
+      "name": "HEART'S♡KISS",
+      "special": "New Arrange Ver.",
+      "image": "./assets/images/HEART's♡KISS.jpg",
+      "music": "./assets/songs/Heart's Kiss.mp3",
+      "artist": "B-KOMACHI"
+    },
+    {
+      "name": "STAR☆T☆RAIN",
+      "special": "New Arrange Ver.",
+      "image": "./assets/images/startttrain.jpg",
+      "music": "./assets/songs/start train.mp3",
+      "artist": "B-KOMACHI"
+    },
+    {
       "name": "SIGN♡B",
       "image": "./assets/images/signb.jpg",
       "music": "./assets/songs/signb.mp3",

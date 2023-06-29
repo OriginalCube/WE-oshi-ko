@@ -1,5 +1,5 @@
 import React from "react";
-import Playlist from "./visualizer/Playlist";
+import Playlist from "./Playlist";
 import VisualizerControls from "./VisualizerControl";
 import SongData from "./SongData.json";
 
@@ -9,7 +9,7 @@ const Visualizer = (props) => {
   const [songName, setSongName] = React.useState("");
   const [artistName, setArtistName] = React.useState("");
   const [mainImage, setMainImage] = React.useState("");
-  const [bgLock, setBgLock] = React.useState(false);
+  const [specialText, setSpecialText] = React.useState("");
   const [baseSize, setBaseSize] = React.useState(1);
   const [playerColor, setPlayerColor] = React.useState(props.playerColor);
 
@@ -111,9 +111,6 @@ const Visualizer = (props) => {
         setSongId(0);
       }
     }
-    if (!bgLock) {
-      props.customBg();
-    }
     clickAudio(0);
   };
 
@@ -193,6 +190,9 @@ const Visualizer = (props) => {
     setArtistName(SongData["songs"][songId].artist);
     setSongName(SongData["songs"][songId].name);
     setMainImage(SongData["songs"][songId].image);
+    setSpecialText(
+      SongData["songs"][songId].special ? SongData["songs"][songId].special : ""
+    );
     audioRef.current.volume = volume;
     if (isReady.current) {
       audioRef.current.play();
@@ -232,12 +232,16 @@ const Visualizer = (props) => {
       <p
         className="song-title font-semibold text-white opacity-80 spotify-regular overflow-visible"
         style={{
-          fontSize: `${0.6 * (baseSize * textSize)}rem`,
+          fontSize: `${
+            specialText
+              ? 0.35 * (baseSize * textSize)
+              : 0.6 * (baseSize * textSize)
+          }rem`,
           marginTop: `${0.3 * (baseSize * textSize)}rem`,
           marginLeft: `${0.125 * (baseSize * textSize)}rem`,
         }}
       >
-        {songName.substring(0, 12).toUpperCase()}
+        {songName.toUpperCase() + " " + specialText}
       </p>
       <p
         className="font-extrathin text-white opacity-70 spotify-regular"
@@ -247,7 +251,7 @@ const Visualizer = (props) => {
           marginLeft: `${0.125 * (baseSize * textSize)}rem`,
         }}
       >
-        {artistName.substring(0, 12).toUpperCase()}
+        {artistName.toUpperCase()}
       </p>
     </>
   );
@@ -313,7 +317,10 @@ const Visualizer = (props) => {
           backgroundColor: `rgba(${playerColor}, ${props.playerOpacity})`,
         }}
       >
-        <div className="h-full" style={{ width: "22%" }}>
+        <div
+          className={`h-full ${playlist ? "overflow-y-scroll" : " "} scrollBar`}
+          style={{ width: "22%" }}
+        >
           {playlist ? (
             <Playlist
               textSize={textSize}
