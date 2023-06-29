@@ -14,34 +14,34 @@
     },
     {
       "name": "FULL MOON",
-      "image": "./assets/images/Mephisto.jpg",
+      "image": "./assets/images/Full moon.jpg",
       "music": "./assets/songs/Full moon.mp3",
       "artist": "ARIMA KANA"
     },
     {
-      "name": "PIYEON BOOT DANCE",
-      "image": "./assets/images/Mephisto.jpg",
-      "music": "./assets/songs/Piyeon Boot Dance.mp3",
-      "artist": "PIYEON"
+      "name": "PIEYON DANCE",
+      "image": "./assets/images/Pieyon.jpg",
+      "music": "./assets/songs/Pieyon Boot Dance.mp3",
+      "artist": "PIEYON"
     },
     {
       "name": "SIGN♡B",
       "special": "New Arrange Ver.",
-      "image": "./assets/images/signb.jpg",
+      "image": "./assets/images/B-Komachi.jpg",
       "music": "./assets/songs/sign b.mp3",
       "artist": "B-KOMACHI"
     },
     {
       "name": "HEART'S♡KISS",
       "special": "New Arrange Ver.",
-      "image": "./assets/images/HEART's♡KISS.jpg",
+      "image": "./assets/images/B-Komachi.jpg",
       "music": "./assets/songs/Heart's Kiss.mp3",
       "artist": "B-KOMACHI"
     },
     {
       "name": "STAR☆T☆RAIN",
       "special": "New Arrange Ver.",
-      "image": "./assets/images/startttrain.jpg",
+      "image": "./assets/images/B-Komachi.jpg",
       "music": "./assets/songs/start train.mp3",
       "artist": "B-KOMACHI"
     },
