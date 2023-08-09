@@ -4,6 +4,9 @@ presets already set in the wallpaper and images provided by the wallpaper from t
 
 <img src="https://i.imgur.com/93sip8O.png" />
 
+##  Steam Workshop Link
+[Oshi no Ko! 推しの子 ! Music Player](https://steamcommunity.com/sharedfiles/filedetails/?id=2980038620)
+
 ##  Time to develop
 2 months
 
