@@ -2,6 +2,8 @@
 This is a web-based wallpaper inspired from the anime oshi no ko and monster cat visualizer. Users are allowed to include their custom images and colors. There are also
 presets already set in the wallpaper and images provided by the wallpaper from the ED. You can also navigate the songs through the playlist that you can easily access.
 
+<img src="https://i.imgur.com/93sip8O.png" />
+
 ##  Time to develop
 2 months
 
